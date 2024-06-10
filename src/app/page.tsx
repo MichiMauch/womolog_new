@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
@@ -39,8 +39,11 @@ export default function Home() {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   useEffect(() => {
-    // Erzwinge den Dark Mode
-    document.documentElement.classList.add('dark');
+    // Check if running in browser before accessing window or document
+    if (typeof window !== 'undefined') {
+      // Erzwinge den Dark Mode
+      document.documentElement.classList.add('dark');
+    }
 
     fetch('/api/sheetData')
       .then((response) => response.json())
@@ -154,7 +157,7 @@ export default function Home() {
         </a>{" "}
         for the pictures.
       </footer>
-      { /*selectedPlace && (
+      {selectedPlace && (
         <Modal
           visible={isVisible}
           onClose={() => setIsVisible(false)}
@@ -166,20 +169,11 @@ export default function Home() {
             <p><strong>Date:</strong> {selectedPlace.dateFrom} - {selectedPlace.dateTo}</p>
             <p><strong>Coordinates:</strong> {selectedPlace.latitude}, {selectedPlace.longitude}</p>
             <div className="mt-4" style={{ height: '300px' }}>
-              <MapContainer center={[selectedPlace.latitude, selectedPlace.longitude]} zoom={13} style={{ height: '100%', width: '100%' }}>
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <Marker position={[selectedPlace.latitude, selectedPlace.longitude]}>
-                  <Popup>{selectedPlace.title}</Popup>
-                </Marker>
-                <CenterMap center={[selectedPlace.latitude, selectedPlace.longitude]} />
-              </MapContainer>
+              
             </div>
           </div>
         </Modal>
-      )*/} 
+      )}
     </GeistProvider>
   );
 }
