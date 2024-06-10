@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { GeistProvider, CssBaseline, Modal, Text, Button } from '@geist-ui/core';
@@ -25,7 +23,7 @@ interface Place {
   longitude: number;
 }
 
-const CenterMap = ({ center }) => {
+const CenterMap = ({ center }: { center: [number, number] }) => {
   const map = useMap();
   useEffect(() => {
     map.setView(center);
@@ -60,7 +58,6 @@ export default function Home() {
   }, []);
 
   const convertCloudflareLink = (link: string) => {
-    // Annahme: Der Link hat das Format: "https://domain/path/to/image/20231010_113752.webp"
     const segments = link.split('/');
     const filename = segments[segments.length - 1]; // letzter Teil des Pfads
     const baseName = filename.split('.')[0]; // Entferne die Erweiterung
@@ -155,7 +152,7 @@ export default function Home() {
         </a>{" "}
         for the pictures.
       </footer>
-      {selectedPlace && (
+      { /*selectedPlace && (
         <Modal
           visible={isVisible}
           onClose={() => setIsVisible(false)}
@@ -180,7 +177,7 @@ export default function Home() {
             </div>
           </div>
         </Modal>
-      )}
+      )*/} 
     </GeistProvider>
   );
 }
