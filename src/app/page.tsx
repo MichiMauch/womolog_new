@@ -2,18 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { GeistProvider, CssBaseline, Modal, Text, Button } from '@geist-ui/core';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-
-// Fix for the default icon issue in react-leaflet
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-});
+import { GeistProvider, CssBaseline, Modal } from '@geist-ui/core';
 
 interface Place {
   title: string;
@@ -24,14 +13,6 @@ interface Place {
   latitude: number;
   longitude: number;
 }
-
-const CenterMap = ({ center }: { center: [number, number] }) => {
-  const map = useMap();
-  useEffect(() => {
-    map.setView(center);
-  }, [center, map]);
-  return null;
-};
 
 export default function Home() {
   const [data, setData] = useState<Place[]>([]);
@@ -168,9 +149,6 @@ export default function Home() {
             <p><strong>Location:</strong> {selectedPlace.location}</p>
             <p><strong>Date:</strong> {selectedPlace.dateFrom} - {selectedPlace.dateTo}</p>
             <p><strong>Coordinates:</strong> {selectedPlace.latitude}, {selectedPlace.longitude}</p>
-            <div className="mt-4" style={{ height: '300px' }}>
-              
-            </div>
           </div>
         </Modal>
       )}
