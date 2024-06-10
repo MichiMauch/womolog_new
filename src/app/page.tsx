@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { GeistProvider, CssBaseline, Modal, Text, Button } from '@geist-ui/core';
