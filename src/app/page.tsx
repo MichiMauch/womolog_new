@@ -2,18 +2,41 @@
 
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { GeistProvider, CssBaseline, Modal, Text, Button } from '@geist-ui/core';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fix for the default icon issue in react-leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+});
 
 interface Place {
   title: string;
   location: string;
   dateFrom: string;
   dateTo: string;
-  coordinates: string;
   imageLinks: string;
+  latitude: number;
+  longitude: number;
 }
+
+const CenterMap = ({ center }) => {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(center);
+  }, [center, map]);
+  return null;
+};
 
 export default function Home() {
   const [data, setData] = useState<Place[]>([]);
+  const [isVisible, setIsVisible] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   useEffect(() => {
     // Erzwinge den Dark Mode
@@ -21,14 +44,15 @@ export default function Home() {
 
     fetch('/api/sheetData')
       .then((response) => response.json())
-      .then((data: string[][]) => {
+      .then((data: any[][]) => {
         const formattedData: Place[] = data.map((row) => ({
           title: row[0],
           location: row[1],
           dateFrom: row[2],
           dateTo: row[3],
-          coordinates: row[4],
-          imageLinks: row[5] ? convertCloudflareLink(row[5]) : '',
+          imageLinks: row[4] ? convertCloudflareLink(row[4]) : '',
+          latitude: parseFloat(row[5]),
+          longitude: parseFloat(row[6]),
         }));
         setData(formattedData);
       })
@@ -36,12 +60,21 @@ export default function Home() {
   }, []);
 
   const convertCloudflareLink = (link: string) => {
-    const baseName = link.split('/').pop()?.split('.')[0]; // Basisname des Bildes
+    // Annahme: Der Link hat das Format: "https://domain/path/to/image/20231010_113752.webp"
+    const segments = link.split('/');
+    const filename = segments[segments.length - 1]; // letzter Teil des Pfads
+    const baseName = filename.split('.')[0]; // Entferne die Erweiterung
     return baseName ? `https://pub-7b46ce1a4c0f4ff6ad2ed74d56e2128a.r2.dev/${baseName}.webp` : '';
   };
 
+  const openModal = (place: Place) => {
+    setSelectedPlace(place);
+    setIsVisible(true);
+  };
+
   return (
-    <>
+    <GeistProvider>
+      <CssBaseline />
       <Head>
         <title>Womolog</title>
         <meta property="og:image" content="/og-image.png" />
@@ -68,23 +101,24 @@ export default function Home() {
               Clone and Deploy
             </a>
           </div>
-          {data.map(({ title, location, dateFrom, dateTo, coordinates, imageLinks }, index) => (
+          {data.map((place, index) => (
             <div
               key={index}
               className="relative block w-full cursor-pointer rounded-lg shadow-md dark:bg-gray-900 dark:text-gray-100"
               style={{ height: 'calc(50vh - 1rem)' }}
+              onClick={() => openModal(place)}
             >
               <div className="relative h-full w-full transform rounded-lg brightness-90 transition will-change-auto hover:brightness-110">
                 <img
-                  alt={title}
+                  alt={place.title}
                   className="absolute inset-0 h-full w-full object-cover rounded-lg"
-                  src={imageLinks}
+                  src={place.imageLinks}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-50 rounded-lg"></div>
                 <div className="absolute bottom-0 p-4 rounded-lg">
-                  <p className="text-gray-300">{title}</p>
-                  <p className="text-gray-300">{location}</p>
-                  <p className="text-gray-300">{dateFrom} - {dateTo}</p>
+                  <p className="text-gray-300">{place.title}</p>
+                  <p className="text-gray-300">{place.location}</p>
+                  <p className="text-gray-300">{place.dateFrom} - {place.dateTo}</p>
                 </div>
               </div>
             </div>
@@ -121,6 +155,32 @@ export default function Home() {
         </a>{" "}
         for the pictures.
       </footer>
-    </>
+      {selectedPlace && (
+        <Modal
+          visible={isVisible}
+          onClose={() => setIsVisible(false)}
+          className="fixed inset-0 flex items-center justify-center p-4 w-3/4"
+        >
+          <div className="bg-white p-4 rounded-lg dark:bg-gray-800 dark:text-gray-100">
+            <h2 className="text-2xl font-bold mb-4">{selectedPlace.title}</h2>
+            <p><strong>Location:</strong> {selectedPlace.location}</p>
+            <p><strong>Date:</strong> {selectedPlace.dateFrom} - {selectedPlace.dateTo}</p>
+            <p><strong>Coordinates:</strong> {selectedPlace.latitude}, {selectedPlace.longitude}</p>
+            <div className="mt-4" style={{ height: '300px' }}>
+              <MapContainer center={[selectedPlace.latitude, selectedPlace.longitude]} zoom={13} style={{ height: '100%', width: '100%' }}>
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={[selectedPlace.latitude, selectedPlace.longitude]}>
+                  <Popup>{selectedPlace.title}</Popup>
+                </Marker>
+                <CenterMap center={[selectedPlace.latitude, selectedPlace.longitude]} />
+              </MapContainer>
+            </div>
+          </div>
+        </Modal>
+      )}
+    </GeistProvider>
   );
 }
