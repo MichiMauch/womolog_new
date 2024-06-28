@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+.bg-custom {
+  background-image: url('/bgstart.jpg');
+  background-size: cover; /* Optionally: 'contain', 'auto' */
+  background-position: center; /* Optionally: 'top', 'bottom', 'left', 'right' */
+  background-repeat: no-repeat; /* Optionally: 'repeat', 'repeat-x', 'repeat-y' */
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

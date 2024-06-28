@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { GeistProvider, CssBaseline, Modal } from '@geist-ui/core';
+import { Modal, Box, Typography } from '@mui/material';
+import { GeistProvider, CssBaseline } from '@geist-ui/core';
 
 interface Place {
   title: string;
@@ -14,15 +15,33 @@ interface Place {
   longitude: number;
 }
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '50rem',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  outline: 0,
+  borderRadius: '8px',
+  p: 0, // No padding inside the modal box
+};
+
+const contentStyle = {
+  position: 'relative',
+  borderRadius: '8px',
+  padding: '10px',
+  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+};
+
 export default function Home() {
   const [data, setData] = useState<Place[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   useEffect(() => {
-    // Check if running in browser before accessing window or document
     if (typeof window !== 'undefined') {
-      // Erzwinge den Dark Mode
       document.documentElement.classList.add('dark');
     }
 
@@ -45,14 +64,19 @@ export default function Home() {
 
   const convertCloudflareLink = (link: string) => {
     const segments = link.split('/');
-    const filename = segments[segments.length - 1]; // letzter Teil des Pfads
-    const baseName = filename.split('.')[0]; // Entferne die Erweiterung
+    const filename = segments[segments.length - 1];
+    const baseName = filename.split('.')[0];
     return baseName ? `https://pub-7b46ce1a4c0f4ff6ad2ed74d56e2128a.r2.dev/${baseName}.webp` : '';
   };
 
   const openModal = (place: Place) => {
     setSelectedPlace(place);
     setIsVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsVisible(false);
+    setSelectedPlace(null);
   };
 
   return (
@@ -63,26 +87,19 @@ export default function Home() {
         <meta property="og:image" content="/og-image.png" />
         <meta name="twitter:image" content="/og-image.png" />
       </Head>
-      <main className="mx-auto max-w-[1960px] p-4 dark:bg-black dark:text-white">
+      <main className="mx-auto max-w-[1960px] p-4 dark:bg-black dark:white">
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="relative flex h-[calc(100vh-2rem)] flex-col items-center justify-end gap-4 overflow-hidden rounded-lg bg-white/10 p-4 text-center text-white shadow-highlight lg:row-span-2 dark:bg-gray-900 dark:text-gray-100">
+          <div className="relative flex h-[calc(100vh-2rem)] flex-col items-center justify-end gap-4 overflow-hidden rounded-lg p-4 text-center text-white lg:row-span-2 dark:bg-gray-900 dark:text-white bg-custom">
             <div className="absolute inset-0 flex items-center justify-center opacity-20">
-              <span className="absolute left-0 right-0 bottom-0 h-[400px] bg-gradient-to-b from-black/0 via-black to-black"></span>
+              <span className="absolute left-0 right-0 bottom-0 h-[400px]"></span>
             </div>
             <h1 className="mt-8 mb-4 text-base font-bold uppercase tracking-widest">
-              2024 Event Photos
+              womolog.ch<br />Unser Wohnmobil-Logbuch
             </h1>
-            <p className="max-w-[40ch] text-white/75 sm:max-w-[32ch]">
-              Our incredible Next.js community got together for our first ever in-person conference!
+            <p className="font-bold max-w-[40ch] text-white sm:max-w-[32ch]">
+              Seit Juli 2018 sind wir mit unserem Wohnmobil unterwegs. Hier findest du all unsere Stationen,
+              Campingplätze, Stellplätze und Versorgungsplätze welche wir besucht haben.
             </p>
-            <a
-              className="pointer z-10 mt-6 rounded-lg border border-white bg-white px-3 py-2 text-sm font-semibold text-black transition hover:bg-white/10 hover:text-white md:mt-4"
-              href="https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-cloudinary&project-name=nextjs-image-gallery&repository-name=with-cloudinary&env=NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,CLOUDINARY_API_KEY,CLOUDINARY_API_SECRET,CLOUDINARY_FOLDER&envDescription=API%20Keys%20from%20Cloudinary%20needed%20to%20run%20this%20application"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Clone and Deploy
-            </a>
           </div>
           {data.map((place, index) => (
             <div
@@ -91,17 +108,16 @@ export default function Home() {
               style={{ height: 'calc(50vh - 1rem)' }}
               onClick={() => openModal(place)}
             >
-              <div className="relative h-full w-full transform rounded-lg brightness-90 transition will-change-auto hover:brightness-110">
+              <div className="relative h-full w-full rounded-lg overflow-hidden">
                 <img
                   alt={place.title}
-                  className="absolute inset-0 h-full w-full object-cover rounded-lg"
+                  className="absolute inset-0 h-full w-full object-cover transform transition-transform duration-500 ease-in-out hover:scale-105 rounded-lg"
                   src={place.imageLinks}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-50 rounded-lg"></div>
                 <div className="absolute bottom-0 p-4 rounded-lg">
-                  <p className="text-gray-300">{place.title}</p>
-                  <p className="text-gray-300">{place.location}</p>
-                  <p className="text-gray-300">{place.dateFrom} - {place.dateTo}</p>
+                  <p className="text-white mb-1 font-bold">
+                    {place.title} <br />{place.location}<br />{place.dateFrom} - {place.dateTo}
+                  </p>
                 </div>
               </div>
             </div>
@@ -109,48 +125,49 @@ export default function Home() {
         </div>
       </main>
       <footer className="p-6 text-center text-white/80 sm:p-12 dark:text-gray-100">
-        Thank you to{" "}
         <a
-          href="https://edelsonphotography.com/"
+          href="https://www.michimauch.ch/"
           target="_blank"
           className="font-semibold hover:text-white dark:hover:text-gray-300"
           rel="noreferrer"
         >
-          Josh Edelson
+          Michi & Sibylle Mauch
         </a>
-        ,{" "}
-        <a
-          href="https://www.newrevmedia.com/"
-          target="_blank"
-          className="font-semibold hover:text-white dark:hover:text-gray-300"
-          rel="noreferrer"
-        >
-          Jenny Morgan
-        </a>
-        , and{" "}
-        <a
-          href="https://www.garysextonphotography.com/"
-          target="_blank"
-          className="font-semibold hover:text-white dark:hover:text-gray-300"
-          rel="noreferrer"
-        >
-          Gary Sexton
-        </a>{" "}
-        for the pictures.
       </footer>
       {selectedPlace && (
         <Modal
-          visible={isVisible}
-          onClose={() => setIsVisible(false)}
-          className="fixed inset-0 flex items-center justify-center p-4 w-3/4"
-        >
-          <div className="bg-white p-4 rounded-lg dark:bg-gray-800 dark:text-gray-100">
-            <h2 className="text-2xl font-bold mb-4">{selectedPlace.title}</h2>
-            <p><strong>Location:</strong> {selectedPlace.location}</p>
-            <p><strong>Date:</strong> {selectedPlace.dateFrom} - {selectedPlace.dateTo}</p>
-            <p><strong>Coordinates:</strong> {selectedPlace.latitude}, {selectedPlace.longitude}</p>
-          </div>
-        </Modal>
+        open={isVisible}
+        onClose={closeModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        BackdropProps={{
+          style: {
+            backdropFilter: 'blur(10px)',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)', // heller Hintergrund
+          },
+        }}
+      >
+        <Box sx={style}>
+          <Box sx={contentStyle}>
+            <div
+              className="relative w-full h-96 rounded-lg bg-cover bg-center"
+              style={{ backgroundImage: `url(${selectedPlace.imageLinks})` }}
+            >
+              <div className="absolute bottom-0 left-0 z-10 p-4 bg-black bg-opacity-50 w-auto rounded-lg">
+                <Typography id="modal-modal-title" variant="h6" component="h2" className="text-white">
+                  {selectedPlace.title}
+                </Typography>
+                <Typography id="modal-modal-description" className="text-white">
+                  {selectedPlace.location}<br />
+                  {selectedPlace.dateFrom} - {selectedPlace.dateTo}<br />
+                  {selectedPlace.latitude}, {selectedPlace.longitude}
+                </Typography>
+              </div>
+            </div>
+          </Box>
+        </Box>
+      </Modal>
+      
       )}
     </GeistProvider>
   );
