@@ -147,7 +147,7 @@ export default function Home() {
           },
         }}
       >
-        <Box sx={style}>
+        <Box sx={{ ...style, width: '90%', maxWidth: '50rem' }}>
           <Box sx={contentStyle}>
             <div
               className="relative w-full h-96 rounded-lg bg-cover bg-center"
@@ -167,6 +167,7 @@ export default function Home() {
           </Box>
         </Box>
       </Modal>
+      
       
       )}
     </GeistProvider>
