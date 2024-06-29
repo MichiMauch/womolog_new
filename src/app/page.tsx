@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Modal, Box, Typography } from '@mui/material';
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
+import MapComponent from '../comoponent/map';
+
 
 interface Place {
   title: string;
@@ -135,38 +137,45 @@ export default function Home() {
         </a>
       </footer>
       {selectedPlace && (
-        <Modal
-        open={isVisible}
-        onClose={closeModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        BackdropProps={{
-          style: {
-            backdropFilter: 'blur(10px)',
-            backgroundColor: 'rgba(255, 255, 255, 0.2)', // heller Hintergrund
-          },
-        }}
-      >
-        <Box sx={{ ...style, width: '90%', maxWidth: '50rem' }}>
-          <Box sx={contentStyle}>
-            <div
-              className="relative w-full h-96 rounded-lg bg-cover bg-center"
-              style={{ backgroundImage: `url(${selectedPlace.imageLinks})` }}
-            >
-              <div className="absolute bottom-0 left-0 z-10 p-4 bg-black bg-opacity-50 w-auto rounded-lg">
-                <Typography id="modal-modal-title" variant="h6" component="h2" className="text-white">
-                  {selectedPlace.title}
-                </Typography>
-                <Typography id="modal-modal-description" className="text-white">
-                  {selectedPlace.location}<br />
-                  {selectedPlace.dateFrom} - {selectedPlace.dateTo}<br />
-                  {selectedPlace.latitude}, {selectedPlace.longitude}
-                </Typography>
-              </div>
-            </div>
-          </Box>
-        </Box>
-      </Modal>
+ <Modal
+ open={isVisible}
+ onClose={closeModal}
+ aria-labelledby="modal-modal-title"
+ aria-describedby="modal-modal-description"
+ BackdropProps={{
+   style: {
+     backdropFilter: 'blur(10px)',
+     backgroundColor: 'rgba(255, 255, 255, 0.2)',
+   },
+ }}
+>
+ <Box sx={{ ...style, width: '90%', maxWidth: '50rem', position: 'relative' }}>
+   <Box sx={contentStyle}>
+     <div
+       className="relative w-full h-96 rounded-lg bg-cover bg-center"
+       style={{ backgroundImage: `url(${selectedPlace.imageLinks})` }}
+     >
+       <div className="absolute bottom-0 left-0 z-10 p-4 bg-black bg-opacity-50 w-auto rounded-lg">
+         <Typography id="modal-modal-title" variant="h6" component="h2" className="text-white">
+           {selectedPlace.title}
+         </Typography>
+         <Typography id="modal-modal-description" className="text-white">
+           {selectedPlace.location}<br />
+           {selectedPlace.dateFrom} - {selectedPlace.dateTo}<br />
+           {selectedPlace.latitude}, {selectedPlace.longitude}
+         </Typography>
+       </div>
+     </div>
+     <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 20 }}>
+       {selectedPlace && (
+         <MapComponent latitude={selectedPlace.latitude} longitude={selectedPlace.longitude} />
+       )}
+     </div>
+   </Box>
+ </Box>
+</Modal>
+
+
       
       
       )}

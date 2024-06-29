@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.leaflet-control-attribution {
+  display: none;
+}
+.map-container {
+  border-top-left-radius: 10px; /* Passen Sie den Wert nach Bedarf an */
+  overflow: hidden;
+}
+
+
 .bg-custom {
   background-image: url('/bgstart.jpg');
   background-size: cover; /* Optionally: 'contain', 'auto' */
