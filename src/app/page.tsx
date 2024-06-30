@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { Modal, Box, Typography, Button } from '@mui/material';
+import { Modal, Box, Typography, Button, Skeleton } from '@mui/material';
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
 // import MapComponent from '../component/map';
 import { IconButton } from '@mui/material';
@@ -11,6 +11,8 @@ import MapIcon from '@mui/icons-material/Map';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import dynamic from 'next/dynamic';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const MapComponent = dynamic(() => import('../component/map'), {
   ssr: false
@@ -116,21 +118,32 @@ export default function Home() {
     }
 
     fetch('/api/sheetData')
-      .then((response) => response.json())
-      .then((data: any[][]) => {
-        const formattedData: Place[] = data.map((row) => ({
-          title: row[0],
-          location: row[1],
-          dateFrom: row[2],
-          dateTo: row[3],
-          imageLinks: row[4] ? convertCloudflareLink(row[4]) : '',
-          latitude: parseFloat(row[5]),
-          longitude: parseFloat(row[6]),
-        }));
-        setData(formattedData);
-      })
-      .catch((error) => console.error('Error fetching data:', error));
-  }, []);
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Netzwerkantwort war nicht ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const formattedData: Place[] = data.map((row: any[]) => ({
+        title: row[0],
+        location: row[1],
+        dateFrom: row[2],
+        dateTo: row[3],
+        imageLinks: row[4] ? convertCloudflareLink(row[4]) : '',
+        latitude: parseFloat(row[5]),
+        longitude: parseFloat(row[6]),
+      }));
+      setData(formattedData);
+    })
+    .catch((error) => {
+      console.error('Fehler beim Abrufen der Daten:', error);
+    })
+    .finally(() => {
+      console.log('Datenabruf abgeschlossen');
+      setIsLoading(false);
+    });
+}, []);
 
   const convertCloudflareLink = (link: string) => {
     const segments = link.split('/');
@@ -161,6 +174,19 @@ export default function Home() {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'black' }}>
+        <CircularProgress color="success" />
+        <Typography variant="h6" sx={{ marginTop: 2, color: 'white' }}>
+    Daten werden ruckzuck geladen...
+  </Typography>
+      </Box>
+    );
+  }
   
   
   return (
@@ -172,6 +198,7 @@ export default function Home() {
         <meta name="twitter:image" content="/og-image.png" />
       </Head>
       <main className="mx-auto max-w-[1960px] p-4 dark:bg-black dark:white">
+      
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
           <div className="relative flex h-[calc(100vh-2rem)] flex-col items-center justify-end gap-4 overflow-hidden rounded-lg p-4 text-center text-white lg:row-span-2 dark:bg-gray-900 dark:text-white bg-custom">
             <div className="absolute inset-0 flex items-center justify-center opacity-20">
@@ -207,6 +234,7 @@ export default function Home() {
             </div>
           ))}
         </div>
+        
       </main>
       <footer className="p-6 text-center text-white/80 sm:p-12 dark:text-gray-100">
         <a
