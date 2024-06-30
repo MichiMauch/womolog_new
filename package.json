@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.11.5",
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.2",
+    "@mui/icons-material": "^5.15.21",
     "@mui/material": "^5.15.20",
     "@types/react-leaflet": "^3.0.0",
     "aws-sdk": "^2.1637.0",
