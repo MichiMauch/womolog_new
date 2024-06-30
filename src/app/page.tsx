@@ -4,12 +4,17 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Modal, Box, Typography, Button } from '@mui/material';
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
-import MapComponent from '../component/map';
+// import MapComponent from '../component/map';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import MapIcon from '@mui/icons-material/Map';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import dynamic from 'next/dynamic';
+
+const MapComponent = dynamic(() => import('../component/map'), {
+  ssr: false
+});
 
 
 interface Place {
