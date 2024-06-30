@@ -19,7 +19,7 @@ L.Icon.Default.mergeOptions({
 const MapClickHandler = ({ latitude, longitude, enableClick }) => {
   useMapEvents({
     click: () => {
-      if (enableClick) {
+      if (enableClick && typeof window !== 'undefined') {
         window.open(`https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=13/${latitude}/${longitude}`, '_blank');
       }
     },
