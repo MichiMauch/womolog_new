@@ -7,6 +7,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Womolog - Unser Wohnmobil-Logbuch",
   description: "Im Womolog erfassen wir alle Standorte, auf welchem wir mit unserem Wohnmobil schon mal gestanden sind.",
+  robots: 'index, follow', // Ersetze dies durch die gewünschten robots-Einstellungen
+  alternates: {
+    canonical: 'https://womolog.ch',
+  },
   openGraph: {
     type: 'website',
     url: 'https://womolog.ch', // Ersetze dies durch deine tatsächliche URL
