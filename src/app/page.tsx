@@ -1,10 +1,8 @@
-"use client";
-
-import React, { useEffect, useState } from 'react';
+"use client"
+import React, { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import { Modal, Box, Typography, Button, Skeleton } from '@mui/material';
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
-// import MapComponent from '../component/map';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import MapIcon from '@mui/icons-material/Map';
@@ -13,11 +11,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import dynamic from 'next/dynamic';
 import CircularProgress from '@mui/material/CircularProgress';
 
-
 const MapComponent = dynamic(() => import('../component/map'), {
   ssr: false
 });
-
 
 interface Place {
   title: string;
@@ -34,7 +30,7 @@ interface ChildModalProps {
   longitude: number;
   open: boolean;
   handleClose: () => void;
-  showZoomControl: boolean; // Füge dies hier hinzu
+  showZoomControl: boolean;
 }
 
 const style = {
@@ -47,7 +43,7 @@ const style = {
   boxShadow: 24,
   outline: 0,
   borderRadius: '8px',
-  p: 0, // No padding inside the modal box
+  p: 0,
 };
 
 const contentStyle = {
@@ -66,8 +62,8 @@ function ChildModal({ latitude, longitude, open, handleClose, showZoomControl }:
       aria-describedby="child-modal-description"
       BackdropProps={{
         style: {
-          backdropFilter: 'none', // Kein Blur-Effekt
-          backgroundColor: 'transparent', // Transparenter Hintergrund
+          backdropFilter: 'none',
+          backgroundColor: 'transparent',
         },
       }}
     >
@@ -96,7 +92,7 @@ function ChildModal({ latitude, longitude, open, handleClose, showZoomControl }:
             '&:hover': {
               backgroundColor: 'gray',
             },
-          }} 
+          }}
         >
           <CloseIcon sx={{ fontSize: 20 }} />
         </IconButton>
@@ -106,44 +102,53 @@ function ChildModal({ latitude, longitude, open, handleClose, showZoomControl }:
   );
 }
 
-
 export default function Home() {
   const [data, setData] = useState<Place[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const convertDate = (dateStr: string) => {
+    const [day, month, year] = dateStr.split('.').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const fetchData = useCallback(() => {
+    fetch('/api/sheetData')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Netzwerkantwort war nicht ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const formattedData: Place[] = data.map((row: any[]) => ({
+          title: row[0],
+          location: row[1],
+          dateFrom: row[2],
+          dateTo: row[3],
+          imageLinks: row[4] ? convertCloudflareLink(row[4]) : '',
+          latitude: parseFloat(row[5]),
+          longitude: parseFloat(row[6]),
+        }));
+        // Sortiere die Daten nach "dateFrom" in absteigender Reihenfolge
+        const sortedData = formattedData.sort((a, b) => convertDate(b.dateFrom).getTime() - convertDate(a.dateFrom).getTime());
+        setData(sortedData);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error('Fehler beim Abrufen der Daten:', error);
+        setIsLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       document.documentElement.classList.add('dark');
     }
 
-    fetch('/api/sheetData')
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Netzwerkantwort war nicht ok');
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const formattedData: Place[] = data.map((row: any[]) => ({
-        title: row[0],
-        location: row[1],
-        dateFrom: row[2],
-        dateTo: row[3],
-        imageLinks: row[4] ? convertCloudflareLink(row[4]) : '',
-        latitude: parseFloat(row[5]),
-        longitude: parseFloat(row[6]),
-      }));
-      setData(formattedData);
-    })
-    .catch((error) => {
-      console.error('Fehler beim Abrufen der Daten:', error);
-    })
-    .finally(() => {
-      console.log('Datenabruf abgeschlossen');
-      setIsLoading(false);
-    });
-}, []);
+    fetchData();
+  }, [fetchData]);
 
   const convertCloudflareLink = (link: string) => {
     const segments = link.split('/');
@@ -175,30 +180,21 @@ export default function Home() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [isLoading, setIsLoading] = useState(true);
-
   if (isLoading) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'black' }}>
         <CircularProgress color="success" />
         <Typography variant="h6" sx={{ marginTop: 2, color: 'white' }}>
-    Daten werden ruckzuck geladen...
-  </Typography>
+          Daten werden ruckzuck geladen...
+        </Typography>
       </Box>
     );
   }
-  
-  
+
   return (
     <GeistProvider>
       <CssBaseline />
-      <Head>
-        <title>Womolog</title>
-        <meta property="og:image" content="/og-image.png" />
-        <meta name="twitter:image" content="/og-image.png" />
-      </Head>
       <main className="mx-auto max-w-[1960px] p-4 dark:bg-black dark:white">
-      
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
           <div className="relative flex h-[calc(100vh-2rem)] flex-col items-center justify-end gap-4 overflow-hidden rounded-lg p-4 text-center text-white lg:row-span-2 dark:bg-gray-900 dark:text-white bg-custom">
             <div className="absolute inset-0 flex items-center justify-center opacity-20">
@@ -234,7 +230,6 @@ export default function Home() {
             </div>
           ))}
         </div>
-        
       </main>
       <footer className="p-6 text-center text-white/80 sm:p-12 dark:text-gray-100">
         <a
@@ -248,60 +243,41 @@ export default function Home() {
       </footer>
       {selectedPlace && (
         <Modal
-        open={isVisible}
-        onClose={closeModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        BackdropProps={{
-          style: {
-            backdropFilter: 'blur(10px)',
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
-          },
-        }}
-      >
-        <Box sx={{ ...style, width: '90%', maxWidth: '50rem', position: 'relative' }}>
-          <Box sx={contentStyle}>
-            <div
-              className="relative w-full h-96 rounded-lg bg-cover bg-center"
-              style={{ backgroundImage: `url(${selectedPlace.imageLinks})` }}
-            >
-              <div className="absolute bottom-0 left-0 z-10 p-4 bg-black bg-opacity-50 w-auto rounded-lg">
-                <Typography id="modal-modal-title" variant="h6" component="h2" className="text-white">
-                  {selectedPlace.title}
-                </Typography>
-                <Typography id="modal-modal-description" className="text-white">
-                  {selectedPlace.location}<br />
-                  {selectedPlace.dateFrom} - {selectedPlace.dateTo}<br />
-                  {selectedPlace.latitude}, {selectedPlace.longitude}
-                </Typography>
+          open={isVisible}
+          onClose={closeModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          BackdropProps={{
+            style: {
+              backdropFilter: 'blur(10px)',
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            },
+          }}
+        >
+          <Box sx={{ ...style, width: '90%', maxWidth: '50rem', position: 'relative' }}>
+            <Box sx={contentStyle}>
+              <div
+                className="relative w-full h-96 rounded-lg bg-cover bg-center"
+                style={{ backgroundImage: `url(${selectedPlace.imageLinks})` }}
+              >
+                <div className="absolute bottom-0 left:0 z-10 p-4 bg-black bg-opacity-50 w-auto rounded-lg">
+                  <Typography id="modal-modal-title" variant="h6" component="h2" className="text-white">
+                    {selectedPlace.title}
+                  </Typography>
+                  <Typography id="modal-modal-description" className="text-white">
+                    {selectedPlace.location}<br />
+                    {selectedPlace.dateFrom} - {selectedPlace.dateTo}<br />
+                    {selectedPlace.latitude}, {selectedPlace.longitude}
+                  </Typography>
+                </div>
               </div>
-            </div>
-            <IconButton
-              onClick={closeModal}
-              sx={{
-                position: 'absolute',
-                top: -15,
-                right: -15,
-                zIndex: 1000,
-                color: 'white',
-                backgroundColor: 'black',
-                borderRadius: '50%',
-                border: '3px solid white',
-                '&:hover': {
-                  backgroundColor: 'gray',
-                },
-              }}
-            >
-              <CloseIcon sx={{ fontSize: 20 }} />
-            </IconButton>
-            {isMobile ? (
               <IconButton
-                onClick={handleChildModalOpen}
+                onClick={closeModal}
                 sx={{
                   position: 'absolute',
-                  bottom: -15,
+                  top: -15,
                   right: -15,
-                  zIndex: 20,
+                  zIndex: 1000,
                   color: 'white',
                   backgroundColor: 'black',
                   borderRadius: '50%',
@@ -311,16 +287,35 @@ export default function Home() {
                   },
                 }}
               >
-                <MapIcon />
+                <CloseIcon sx={{ fontSize: 20 }} />
               </IconButton>
-            ) : (
-              <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 20 }} onClick={handleChildModalOpen}>
-                <MapComponent latitude={selectedPlace.latitude} longitude={selectedPlace.longitude} enableClick={false} fullSize={false} showZoomControl={undefined} />
-              </div>
-            )}
+              {isMobile ? (
+                <IconButton
+                  onClick={handleChildModalOpen}
+                  sx={{
+                    position: 'absolute',
+                    bottom: -15,
+                    right: -15,
+                    zIndex: 20,
+                    color: 'white',
+                    backgroundColor: 'black',
+                    borderRadius: '50%',
+                    border: '3px solid white',
+                    '&:hover': {
+                      backgroundColor: 'gray',
+                    },
+                  }}
+                >
+                  <MapIcon />
+                </IconButton>
+              ) : (
+                <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 20 }} onClick={handleChildModalOpen}>
+                  <MapComponent latitude={selectedPlace.latitude} longitude={selectedPlace.longitude} enableClick={false} fullSize={false} showZoomControl={undefined} />
+                </div>
+              )}
+            </Box>
           </Box>
-        </Box>
-      </Modal>
+        </Modal>
       )}
       {selectedPlace && (
         <ChildModal
