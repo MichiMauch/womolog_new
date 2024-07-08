@@ -1,15 +1,14 @@
 "use client"
 import React, { useEffect, useState, useCallback } from 'react';
-import Head from 'next/head';
-import { Modal, Box, Typography, Button, Skeleton } from '@mui/material';
+import { Modal, Box, Typography, CircularProgress, IconButton } from '@mui/material';
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
-import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import MapIcon from '@mui/icons-material/Map';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import dynamic from 'next/dynamic';
-import CircularProgress from '@mui/material/CircularProgress';
+import Header from '../component/Header'; // Import the updated Header component
+
 
 const MapComponent = dynamic(() => import('../component/map'), {
   ssr: false
@@ -23,6 +22,8 @@ interface Place {
   imageLinks: string;
   latitude: number;
   longitude: number;
+  country: string; 
+  country_code: string; 
 }
 
 interface ChildModalProps {
@@ -107,6 +108,8 @@ export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [filteredData, setFilteredData] = useState<Place[]>([]);
+  const [countries, setCountries] = useState<string[]>([]);
 
   const convertDate = (dateStr: string) => {
     const [day, month, year] = dateStr.split('.').map(Number);
@@ -122,6 +125,7 @@ export default function Home() {
         return response.json();
       })
       .then((data) => {
+        console.log('Raw data from sheet:', data); // Debug: raw data logging
         const formattedData: Place[] = data.map((row: any[]) => ({
           title: row[0],
           location: row[1],
@@ -130,10 +134,18 @@ export default function Home() {
           imageLinks: row[4] ? convertCloudflareLink(row[4]) : '',
           latitude: parseFloat(row[5]),
           longitude: parseFloat(row[6]),
+          country: row[7], // Bestehendes Land
+          country_code: row[8], // Neuer Ländercode
         }));
+        console.log('Formatted data:', formattedData); // Debug: formatted data logging
         // Sortiere die Daten nach "dateFrom" in absteigender Reihenfolge
         const sortedData = formattedData.sort((a, b) => convertDate(b.dateFrom).getTime() - convertDate(a.dateFrom).getTime());
         setData(sortedData);
+        setFilteredData(sortedData); // Initialize filteredData with all data
+        // Extrahiere einzigartige Länder für den Dropdown-Filter
+        const uniqueCountries = Array.from(new Set(sortedData.map(place => place.country)));
+        setCountries(uniqueCountries);
+        console.log('Unique countries:', uniqueCountries); // Debug: unique countries logging
         setIsLoading(false);
       })
       .catch((error) => {
@@ -177,6 +189,36 @@ export default function Home() {
     setChildModalOpen(false);
   };
 
+  const handleFilter = (startDate: Date | null, endDate: Date | null, country: string) => {
+    const filtered = data.filter(place => {
+      const placeDate = convertDate(place.dateFrom);
+      const dateMatch = (!startDate || placeDate >= startDate) && (!endDate || placeDate <= endDate);
+      const countryMatch = !country || place.country === country;
+      return dateMatch && countryMatch;
+    });
+    document.querySelectorAll('.post').forEach(post => {
+      (post as HTMLElement).style.opacity = '0';
+    });
+    setTimeout(() => {
+      setFilteredData(filtered);
+      document.querySelectorAll('.post').forEach(post => {
+        (post as HTMLElement).style.opacity = '1';
+      });
+    }, 300);
+  };
+
+  const handleReset = () => {
+    document.querySelectorAll('.post').forEach(post => {
+      (post as HTMLElement).style.opacity = '0';
+    });
+    setTimeout(() => {
+      setFilteredData(data);
+      document.querySelectorAll('.post').forEach(post => {
+        (post as HTMLElement).style.opacity = '1';
+      });
+    }, 300);
+  };
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -194,7 +236,8 @@ export default function Home() {
   return (
     <GeistProvider>
       <CssBaseline />
-      <main className="mx-auto max-w-[1960px] p-4 dark:bg-black dark:white">
+      <Header countries={countries} onFilter={handleFilter} onReset={handleReset} /> {/* Header-Komponente */}
+      <main className="mx-auto max-w-[1960px] pl-4 pr-4 pb-4 pt-2 dark:bg-black dark:white">
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
           <div className="relative flex h-[calc(100vh-2rem)] flex-col items-center justify-end gap-4 overflow-hidden rounded-lg p-4 text-center text-white lg:row-span-2 dark:bg-gray-900 dark:text-white bg-custom">
             <div className="absolute inset-0 flex items-center justify-center opacity-20">
@@ -208,11 +251,11 @@ export default function Home() {
               Campingplätze, Stellplätze und Versorgungsplätze welche wir besucht haben.
             </p>
           </div>
-          {data.map((place, index) => (
+          {filteredData.map((place, index) => (
             <div
               key={index}
-              className="relative block w-full cursor-pointer rounded-lg shadow-md dark:bg-gray-900 dark:text-gray-100"
-              style={{ height: 'calc(50vh - 1rem)' }}
+              className="post relative block w-full cursor-pointer rounded-lg shadow-md dark:bg-gray-900 dark:text-gray-100 transition-opacity duration-500"
+              style={{ height: 'calc(50vh - 1rem)', opacity: 1 }}
               onClick={() => openModal(place)}
             >
               <div className="relative h-full w-full rounded-lg overflow-hidden">
@@ -223,7 +266,9 @@ export default function Home() {
                 />
                 <div className="absolute bottom-0 p-4 rounded-lg">
                   <p className="text-white mb-1 font-bold">
-                    {place.title} <br />{place.location}<br />{place.dateFrom} - {place.dateTo}
+                    {place.title} <br />
+                    {place.location} ({place.country_code.toUpperCase()})<br /> {/* toUpperCase() verwenden */}
+                    {place.dateFrom} - {place.dateTo}
                   </p>
                 </div>
               </div>

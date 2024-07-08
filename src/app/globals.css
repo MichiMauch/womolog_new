@@ -2,6 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (max-width: 768px) {
+  .header {
+    display: none;
+  }
+}
+
+
+
+.MuiMenu-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.MuiMenuItem-root {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+
+/* Ensure input text color is black */
+#start-date-picker, #end-date-picker {
+  color: black !important;
+  background-color: white !important;
+}
+
+/* Flatpickr Custom Styles */
+.flatpickr-calendar {
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+  color: #374151;
+}
+
+.flatpickr-day {
+  border-radius: 0.375rem;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background-color: #4a5568;
+  border-color: #4a5568;
+  color: rgb(0, 0, 0) !important;
+}
+
 .leaflet-control-attribution {
   display: none;
 }
