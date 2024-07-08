@@ -11,19 +11,23 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ countries, onFilter, onReset }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [fabPosition, setFabPosition] = useState<string | number>(16); // Typ geändert
 
   useEffect(() => {
-    if (mobileOpen) {
-      setFabPosition('calc(16px + 295px)'); // Adjust based on drawer height
-    } else {
-      setFabPosition(16);
-    }
-  }, [mobileOpen]);
+    const handleDrawerToggle = () => {
+      setMobileOpen((prevOpen) => !prevOpen);
+    };
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+    const fab = document.getElementById('fab');
+    if (fab) {
+      fab.addEventListener('click', handleDrawerToggle);
+    }
+
+    return () => {
+      if (fab) {
+        fab.removeEventListener('click', handleDrawerToggle);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -37,18 +41,18 @@ const Header: React.FC<HeaderProps> = ({ countries, onFilter, onReset }) => {
       <Drawer
         anchor="bottom"
         open={mobileOpen}
-        onClose={handleDrawerToggle}
+        onClose={() => setMobileOpen(false)}
         sx={{ display: { xs: 'block', md: 'none' } }}
         transitionDuration={{ enter: 300, exit: 300 }} // Unified transition duration
       >
         <Box sx={{ p: 2, backgroundColor: 'black', color: 'white' }}>
-          <CombinedFilter countries={countries} onFilter={onFilter} onReset={onReset} onClose={handleDrawerToggle} />
+          <CombinedFilter countries={countries} onFilter={onFilter} onReset={onReset} onClose={() => setMobileOpen(false)} />
         </Box>
       </Drawer>
       <Fab
+        id="fab"
         color="inherit"
         aria-label="open drawer"
-        onClick={handleDrawerToggle}
         sx={{
           display: { xs: 'flex', md: 'none' },
           position: 'fixed',
@@ -56,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({ countries, onFilter, onReset }) => {
           transform: `translateY(${mobileOpen ? '-295px' : '0'})`, // Adjust based on drawer height
           right: 16,
           zIndex: 2000, // Ensure the fab stays above the drawer
-          backgroundColor: 'black',
+          backgroundColor: 'black !important', // Ensure background is always black
           borderRadius: '4px',
           width: 56,
           height: 56,

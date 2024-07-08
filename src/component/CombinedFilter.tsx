@@ -19,12 +19,21 @@ interface CombinedFilterProps {
 const CustomOutlinedInput = styled(OutlinedInput)(({ theme }) => ({
   '& .MuiOutlinedInput-input': {
     color: 'black',
+    backgroundColor: 'white',
+    borderRadius: '8px',
   },
   '& .MuiInputLabel-root': {
     color: 'black',
+    backgroundColor: 'white',
+    padding: '0 4px',
+    transform: 'translate(14px, 12px) scale(1)', // Adjusted transformation
+    '&.MuiInputLabel-shrink': {
+      transform: 'translate(14px, -6px) scale(0.75)', // Adjusted transformation for shrinking
+    },
   },
   '& .MuiOutlinedInput-root': {
     backgroundColor: 'white',
+    borderRadius: '8px',
     '& fieldset': {
       borderColor: '#ced4da',
     },
@@ -109,7 +118,7 @@ const CombinedFilter: React.FC<CombinedFilterProps> = ({ countries, onFilter, on
         padding: '8px 1px 0 1px',
       }}
     >
-      <FormControl variant="outlined" sx={{ minWidth: { xs: '100%', md: 200 }, backgroundColor: 'white' }}>
+      <FormControl variant="outlined" sx={{ minWidth: 200, backgroundColor: 'white', borderRadius: '8px' }}>
         <InputLabel htmlFor="start-date-picker" shrink={startFocused || Boolean(startDate)}>
           Von
         </InputLabel>
@@ -130,7 +139,7 @@ const CombinedFilter: React.FC<CombinedFilterProps> = ({ countries, onFilter, on
           }
         />
       </FormControl>
-      <FormControl variant="outlined" sx={{ minWidth: { xs: '100%', md: 200 }, backgroundColor: 'white' }}>
+      <FormControl variant="outlined" sx={{ minWidth: 200, backgroundColor: 'white', borderRadius: '8px' }}>
         <InputLabel htmlFor="end-date-picker" shrink={endFocused || Boolean(endDate)}>
           Bis
         </InputLabel>
@@ -151,7 +160,7 @@ const CombinedFilter: React.FC<CombinedFilterProps> = ({ countries, onFilter, on
           }
         />
       </FormControl>
-      <FormControl variant="outlined" sx={{ minWidth: { xs: '100%', md: 200 }, backgroundColor: 'white' }}>
+      <FormControl variant="outlined" sx={{ minWidth: 200, backgroundColor: 'white', borderRadius: '8px' }}>
         <InputLabel>Land</InputLabel>
         <Select
           value={selectedCountry}
@@ -188,10 +197,10 @@ const CombinedFilter: React.FC<CombinedFilterProps> = ({ countries, onFilter, on
         </Select>
       </FormControl>
       <Box sx={{ display: 'flex', gap: 1 }}>
-        <IconButton color="primary" onClick={handleFilter} sx={{ color: 'white' }}>
+        <IconButton color="primary" onClick={handleFilter}>
           <FilterListIcon />
         </IconButton>
-        <IconButton color="secondary" onClick={handleReset} sx={{ color: 'white' }}>
+        <IconButton color="secondary" onClick={handleReset}>
           <CloseIcon />
         </IconButton>
       </Box>
