@@ -21,6 +21,9 @@ const CustomOutlinedInput = styled(OutlinedInput)(({ theme }) => ({
     color: 'black',
     backgroundColor: 'white',
     borderRadius: '8px',
+    appearance: 'none', // Remove native appearance
+    '-webkit-appearance': 'none', // Remove native appearance for Safari
+    '-moz-appearance': 'none', // Remove native appearance for Firefox
   },
   '& .MuiInputLabel-root': {
     color: 'black',
