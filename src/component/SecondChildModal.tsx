@@ -186,6 +186,10 @@ const SecondChildModal: React.FC<SecondChildModalProps> = ({ latitude, longitude
           ul li::before {
             content: none;
           }
+
+          ul li {
+            padding-left: 8px; // Dies fügt den Abstand zwischen Punkt und Text hinzu
+          }
         `}</style>
       </Box>
     </Modal>

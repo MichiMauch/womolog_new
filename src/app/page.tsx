@@ -10,6 +10,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import dynamic from 'next/dynamic';
 import Header from '../component/Header'; // Import the updated Header component
 import SecondChildModal from '../component/SecondChildModal'; // Neues Child-Modal importieren
+import AnimatedRV from '../component/AnimatedRV';
 
 const MapComponent = dynamic(() => import('../component/map'), {
   ssr: false
@@ -288,8 +289,19 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'black' }}>
-        <CircularProgress color="success" />
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh', 
+        width: '100vw', // Stellt sicher, dass die volle Breite genutzt wird
+        backgroundColor: 'black',
+        overflow: 'hidden'
+      }}>
+        <Box sx={{ width: '100%', maxWidth: '1000px' }}> {/* Container für das SVG */}
+          <AnimatedRV />
+        </Box>
         <Typography variant="h6" sx={{ marginTop: 2, color: 'white' }}>
           Daten werden ruckzuck geladen...
         </Typography>
