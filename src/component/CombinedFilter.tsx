@@ -32,19 +32,24 @@ const CustomOutlinedInput = styled(OutlinedInput)(({ theme }) => ({
     transform: 'translate(14px, 12px) scale(1)', // Adjusted transformation
     '&.MuiInputLabel-shrink': {
       transform: 'translate(14px, -6px) scale(0.75)', // Adjusted transformation for shrinking
+      fontSize: 'calc(0.75rem + 3px)', // Increased font size by 3px
     },
   },
   '& .MuiOutlinedInput-root': {
     backgroundColor: 'white',
     borderRadius: '8px',
     '& fieldset': {
-      borderColor: '#ced4da',
+      borderColor: 'white', // Set border color to white
     },
     '&:hover fieldset': {
       borderColor: theme.palette.primary.main,
     },
     '&.Mui-focused fieldset': {
-      borderColor: theme.palette.primary.main,
+      borderColor: 'white', // Set focused border color to white
+    },
+    '& legend': {
+      color: 'white', // Set legend text color to white
+      fontSize: '1rem', // Adjust legend font size
     },
   },
 }));
@@ -201,10 +206,10 @@ const CombinedFilter: React.FC<CombinedFilterProps> = ({ countries, onFilter, on
       </FormControl>
       <Box sx={{ display: 'flex', gap: 1 }}>
         <IconButton color="primary" onClick={handleFilter}>
-          <FilterListIcon />
+          <FilterListIcon sx={{ color: 'white', fontSize: '2rem' }} />
         </IconButton>
         <IconButton color="secondary" onClick={handleReset}>
-          <CloseIcon />
+          <CloseIcon sx={{ color: 'white', fontSize: '2rem' }} />
         </IconButton>
       </Box>
     </Box>

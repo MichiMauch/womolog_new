@@ -4,11 +4,12 @@ import { Modal, Box, Typography, CircularProgress, IconButton } from '@mui/mater
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
 import CloseIcon from '@mui/icons-material/Close';
 import MapIcon from '@mui/icons-material/Map';
+import InfoIcon from '@mui/icons-material/Info'; // Neues Icon importieren
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import dynamic from 'next/dynamic';
 import Header from '../component/Header'; // Import the updated Header component
-
+import SecondChildModal from '../component/SecondChildModal'; // Neues Child-Modal importieren
 
 const MapComponent = dynamic(() => import('../component/map'), {
   ssr: false
@@ -103,6 +104,60 @@ function ChildModal({ latitude, longitude, open, handleClose, showZoomControl }:
   );
 }
 
+function ChildModal2({ open, handleClose }: { open: boolean, handleClose: () => void }) {
+  return (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="child-modal2-title"
+      aria-describedby="child-modal2-description"
+      BackdropProps={{
+        style: {
+          backdropFilter: 'none',
+          backgroundColor: 'transparent',
+        },
+      }}
+    >
+      <Box
+        sx={{
+          ...style,
+          width: '50%',
+          maxWidth: '30rem',
+          height: '50%',
+          maxHeight: '20rem',
+          border: '11px solid white',
+          position: 'relative',
+        }}
+      >
+        <IconButton
+          onClick={handleClose}
+          sx={{
+            position: 'absolute',
+            top: -27,
+            right: -27,
+            zIndex: 1000,
+            color: 'white',
+            backgroundColor: 'black',
+            borderRadius: '50%',
+            border: '3px solid white',
+            '&:hover': {
+              backgroundColor: 'gray',
+            },
+          }}
+        >
+          <CloseIcon sx={{ fontSize: 20 }} />
+        </IconButton>
+        <Typography id="child-modal2-title" variant="h6" component="h2" sx={{ p: 2 }}>
+          Zweites Child Modal
+        </Typography>
+        <Typography id="child-modal2-description" sx={{ p: 2 }}>
+          Dies ist der Inhalt des zweiten Child Modals.
+        </Typography>
+      </Box>
+    </Modal>
+  );
+}
+
 export default function Home() {
   const [data, setData] = useState<Place[]>([]);
   const [isVisible, setIsVisible] = useState(false);
@@ -180,6 +235,7 @@ export default function Home() {
   };
 
   const [childModalOpen, setChildModalOpen] = useState(false);
+  const [childModal2Open, setChildModal2Open] = useState(false); // Zustand für das zweite Child Modal
 
   const handleChildModalOpen = () => {
     setChildModalOpen(true);
@@ -187,6 +243,14 @@ export default function Home() {
 
   const handleChildModalClose = () => {
     setChildModalOpen(false);
+  };
+
+  const handleChildModal2Open = () => {
+    setChildModal2Open(true);
+  };
+
+  const handleChildModal2Close = () => {
+    setChildModal2Open(false);
   };
 
   const handleFilter = (startDate: Date | null, endDate: Date | null, country: string) => {
@@ -310,9 +374,8 @@ export default function Home() {
                     {selectedPlace.title}
                   </Typography>
                   <Typography id="modal-modal-description" className="text-white">
-                    {selectedPlace.location}<br />
+                    {selectedPlace.location} ({selectedPlace.country_code.toUpperCase()})<br />
                     {selectedPlace.dateFrom} - {selectedPlace.dateTo}<br />
-                    {selectedPlace.latitude}, {selectedPlace.longitude}
                   </Typography>
                 </div>
               </div>
@@ -358,6 +421,24 @@ export default function Home() {
                   <MapComponent latitude={selectedPlace.latitude} longitude={selectedPlace.longitude} enableClick={false} fullSize={false} showZoomControl={undefined} />
                 </div>
               )}
+              <IconButton
+                onClick={handleChildModal2Open}
+                sx={{
+                  position: 'absolute',
+                  top: -15,
+                  left: -15,
+                  zIndex: 1000,
+                  color: 'white',
+                  backgroundColor: 'black',
+                  borderRadius: '50%',
+                  border: '3px solid white',
+                  '&:hover': {
+                    backgroundColor: 'gray',
+                  },
+                }}
+              >
+                <InfoIcon sx={{ fontSize: 20 }} />
+              </IconButton>
             </Box>
           </Box>
         </Modal>
@@ -369,6 +450,14 @@ export default function Home() {
           open={childModalOpen}
           handleClose={handleChildModalClose}
           showZoomControl={true}
+        />
+      )}
+      {selectedPlace && (
+        <SecondChildModal
+          open={childModal2Open}
+          handleClose={handleChildModal2Close}
+          latitude={selectedPlace.latitude}
+          longitude={selectedPlace.longitude}
         />
       )}
     </GeistProvider>

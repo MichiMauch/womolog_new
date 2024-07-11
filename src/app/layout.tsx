@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
         url: 'https://womolog.ch/images/camper.jpeg', // Ersetze dies durch den Pfad zu deinem Bild
         width: 1200,
         height: 630,
-        alt: 'Womolog Open Graph Image',
+        alt: 'Im Womolog erfassen wir alle Standorte, auf welchem wir mit unserem Wohnmobil schon mal gestanden sind.',
       },
     ],
   },
@@ -44,6 +45,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <body className={inter.className}>{children}</body>
     </html>
   );
