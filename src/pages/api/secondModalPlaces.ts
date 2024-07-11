@@ -16,28 +16,28 @@ interface OverpassResponse {
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { latitude, longitude } = req.query;
+  const { latitude, longitude, radius } = req.query;
 
-  if (!latitude || !longitude) {
-    res.status(400).json({ error: 'Latitude and longitude are required' });
+  if (!latitude || !longitude || !radius) {
+    res.status(400).json({ error: 'Latitude, longitude, and radius are required' });
     return;
   }
 
   const overpassQuery = `
     [out:json];
     (
-      node["route"="hiking"](around:3000,${latitude},${longitude});
-      way["route"="hiking"](around:3000,${latitude},${longitude});
-      relation["route"="hiking"](around:3000,${latitude},${longitude});
-      node["route"="bicycle"](around:3000,${latitude},${longitude});
-      way["route"="bicycle"](around:3000,${latitude},${longitude});
-      relation["route"="bicycle"](around:3000,${latitude},${longitude});
-      node["route"="mtb"](around:3000,${latitude},${longitude});
-      way["route"="mtb"](around:3000,${latitude},${longitude});
-      relation["route"="mtb"](around:3000,${latitude},${longitude});
-      node["tourism"="attraction"](around:3000,${latitude},${longitude});
-      way["tourism"="attraction"](around:3000,${latitude},${longitude});
-      relation["tourism"="attraction"](around:3000,${latitude},${longitude});
+      node["route"="hiking"](around:${radius},${latitude},${longitude});
+      way["route"="hiking"](around:${radius},${latitude},${longitude});
+      relation["route"="hiking"](around:${radius},${latitude},${longitude});
+      node["route"="bicycle"](around:${radius},${latitude},${longitude});
+      way["route"="bicycle"](around:${radius},${latitude},${longitude});
+      relation["route"="bicycle"](around:${radius},${latitude},${longitude});
+      node["route"="mtb"](around:${radius},${latitude},${longitude});
+      way["route"="mtb"](around:${radius},${latitude},${longitude});
+      relation["route"="mtb"](around:${radius},${latitude},${longitude});
+      node["tourism"="attraction"](around:${radius},${latitude},${longitude});
+      way["tourism"="attraction"](around:${radius},${latitude},${longitude});
+      relation["tourism"="attraction"](around:${radius},${latitude},${longitude});
     );
     out center;
   `;

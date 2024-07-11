@@ -1,6 +1,6 @@
-"use client"
+"use client";
 import React, { useEffect, useState, useCallback } from 'react';
-import { Modal, Box, Typography, CircularProgress, IconButton } from '@mui/material';
+import { Modal, Box, Typography, CircularProgress, IconButton, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
 import CloseIcon from '@mui/icons-material/Close';
 import MapIcon from '@mui/icons-material/Map';
@@ -10,10 +10,11 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import dynamic from 'next/dynamic';
 import Header from '../component/Header'; // Import the updated Header component
 import SecondChildModal from '../component/SecondChildModal'; // Neues Child-Modal importieren
+import Weather from '../component/Weather'; // Import the Weather component
 import AnimatedRV from '../component/AnimatedRV';
 
 const MapComponent = dynamic(() => import('../component/map'), {
-  ssr: false
+  ssr: false,
 });
 
 interface Place {
@@ -24,8 +25,8 @@ interface Place {
   imageLinks: string;
   latitude: number;
   longitude: number;
-  country: string; 
-  country_code: string; 
+  country: string;
+  country_code: string;
 }
 
 interface ChildModalProps {
@@ -105,60 +106,6 @@ function ChildModal({ latitude, longitude, open, handleClose, showZoomControl }:
   );
 }
 
-function ChildModal2({ open, handleClose }: { open: boolean, handleClose: () => void }) {
-  return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="child-modal2-title"
-      aria-describedby="child-modal2-description"
-      BackdropProps={{
-        style: {
-          backdropFilter: 'none',
-          backgroundColor: 'transparent',
-        },
-      }}
-    >
-      <Box
-        sx={{
-          ...style,
-          width: '50%',
-          maxWidth: '30rem',
-          height: '50%',
-          maxHeight: '20rem',
-          border: '11px solid white',
-          position: 'relative',
-        }}
-      >
-        <IconButton
-          onClick={handleClose}
-          sx={{
-            position: 'absolute',
-            top: -27,
-            right: -27,
-            zIndex: 1000,
-            color: 'white',
-            backgroundColor: 'black',
-            borderRadius: '50%',
-            border: '3px solid white',
-            '&:hover': {
-              backgroundColor: 'gray',
-            },
-          }}
-        >
-          <CloseIcon sx={{ fontSize: 20 }} />
-        </IconButton>
-        <Typography id="child-modal2-title" variant="h6" component="h2" sx={{ p: 2 }}>
-          Zweites Child Modal
-        </Typography>
-        <Typography id="child-modal2-description" sx={{ p: 2 }}>
-          Dies ist der Inhalt des zweiten Child Modals.
-        </Typography>
-      </Box>
-    </Modal>
-  );
-}
-
 export default function Home() {
   const [data, setData] = useState<Place[]>([]);
   const [isVisible, setIsVisible] = useState(false);
@@ -199,7 +146,7 @@ export default function Home() {
         setData(sortedData);
         setFilteredData(sortedData); // Initialize filteredData with all data
         // Extrahiere einzigartige Länder für den Dropdown-Filter
-        const uniqueCountries = Array.from(new Set(sortedData.map(place => place.country)));
+        const uniqueCountries = Array.from(new Set(sortedData.map((place) => place.country)));
         setCountries(uniqueCountries);
         console.log('Unique countries:', uniqueCountries); // Debug: unique countries logging
         setIsLoading(false);
@@ -255,30 +202,30 @@ export default function Home() {
   };
 
   const handleFilter = (startDate: Date | null, endDate: Date | null, country: string) => {
-    const filtered = data.filter(place => {
+    const filtered = data.filter((place) => {
       const placeDate = convertDate(place.dateFrom);
       const dateMatch = (!startDate || placeDate >= startDate) && (!endDate || placeDate <= endDate);
       const countryMatch = !country || place.country === country;
       return dateMatch && countryMatch;
     });
-    document.querySelectorAll('.post').forEach(post => {
+    document.querySelectorAll('.post').forEach((post) => {
       (post as HTMLElement).style.opacity = '0';
     });
     setTimeout(() => {
       setFilteredData(filtered);
-      document.querySelectorAll('.post').forEach(post => {
+      document.querySelectorAll('.post').forEach((post) => {
         (post as HTMLElement).style.opacity = '1';
       });
     }, 300);
   };
 
   const handleReset = () => {
-    document.querySelectorAll('.post').forEach(post => {
+    document.querySelectorAll('.post').forEach((post) => {
       (post as HTMLElement).style.opacity = '0';
     });
     setTimeout(() => {
       setFilteredData(data);
-      document.querySelectorAll('.post').forEach(post => {
+      document.querySelectorAll('.post').forEach((post) => {
         (post as HTMLElement).style.opacity = '1';
       });
     }, 300);
@@ -289,17 +236,20 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <Box sx={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh', 
-        width: '100vw', // Stellt sicher, dass die volle Breite genutzt wird
-        backgroundColor: 'black',
-        overflow: 'hidden'
-      }}>
-        <Box sx={{ width: '100%', maxWidth: '1000px' }}> {/* Container für das SVG */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          width: '100vw', // Stellt sicher, dass die volle Breite genutzt wird
+          backgroundColor: 'black',
+          overflow: 'hidden',
+        }}
+      >
+        <Box sx={{ width: '100%', maxWidth: '1000px' }}>
+          {/* Container für das SVG */}
           <AnimatedRV />
         </Box>
         <Typography variant="h6" sx={{ marginTop: 2, color: 'white' }}>
@@ -320,11 +270,13 @@ export default function Home() {
               <span className="absolute left-0 right-0 bottom-0 h-[400px]"></span>
             </div>
             <h1 className="mt-8 mb-4 text-base font-bold uppercase tracking-widest">
-              womolog.ch<br />Unser Wohnmobil-Logbuch
+              womolog.ch
+              <br />
+              Unser Wohnmobil-Logbuch
             </h1>
             <p className="font-bold max-w-[40ch] text-white sm:max-w-[32ch]">
-              Seit Juli 2018 sind wir mit unserem Wohnmobil unterwegs. Hier findest du all unsere Stationen,
-              Campingplätze, Stellplätze und Versorgungsplätze welche wir besucht haben.
+              Seit Juli 2018 sind wir mit unserem Wohnmobil unterwegs. Hier findest du all unsere Stationen, Campingplätze, Stellplätze und Versorgungsplätze welche wir
+              besucht haben.
             </p>
           </div>
           {filteredData.map((place, index) => (
@@ -343,7 +295,8 @@ export default function Home() {
                 <div className="absolute bottom-0 p-4 rounded-lg">
                   <p className="text-white mb-1 font-bold">
                     {place.title} <br />
-                    {place.location} ({place.country_code.toUpperCase()})<br /> {/* toUpperCase() verwenden */}
+                    {place.location} ({place.country_code.toUpperCase()})
+                    <br /> {/* toUpperCase() verwenden */}
                     {place.dateFrom} - {place.dateTo}
                   </p>
                 </div>
@@ -353,12 +306,7 @@ export default function Home() {
         </div>
       </main>
       <footer className="p-6 text-center text-white/80 sm:p-12 dark:text-gray-100">
-        <a
-          href="https://www.michimauch.ch/"
-          target="_blank"
-          className="font-semibold hover:text-white dark:hover:text-gray-300"
-          rel="noreferrer"
-        >
+        <a href="https://www.michimauch.ch/" target="_blank" className="font-semibold hover:text-white dark:hover:text-gray-300" rel="noreferrer">
           Michi & Sibylle Mauch
         </a>
       </footer>
@@ -377,20 +325,24 @@ export default function Home() {
         >
           <Box sx={{ ...style, width: '90%', maxWidth: '50rem', position: 'relative' }}>
             <Box sx={contentStyle}>
-              <div
-                className="relative w-full h-96 rounded-lg bg-cover bg-center"
-                style={{ backgroundImage: `url(${selectedPlace.imageLinks})` }}
-              >
-                <div className="absolute bottom-0 left:0 z-10 p-4 bg-black bg-opacity-50 w-auto rounded-lg">
-                  <Typography id="modal-modal-title" variant="h6" component="h2" className="text-white">
-                    {selectedPlace.title}
-                  </Typography>
-                  <Typography id="modal-modal-description" className="text-white">
-                    {selectedPlace.location} ({selectedPlace.country_code.toUpperCase()})<br />
-                    {selectedPlace.dateFrom} - {selectedPlace.dateTo}<br />
-                  </Typography>
+              <div className="relative w-full h-96 rounded-lg bg-cover bg-center" style={{ backgroundImage: `url(${selectedPlace.imageLinks})` }}>
+                <div className="absolute bottom-0 left:0 z-10 p-4 bg-black bg-opacity-50 w-auto rounded-lg flex items-center">
+                  <div className="flex-1 mr-4">
+                    <Typography id="modal-modal-title" variant="h6" component="h2" className="text-white">
+                      {selectedPlace.title}
+                    </Typography>
+                    <Typography id="modal-modal-description" className="text-white">
+                      {selectedPlace.location} ({selectedPlace.country_code.toUpperCase()})
+                      <br />
+                      {selectedPlace.dateFrom} - {selectedPlace.dateTo}
+                    </Typography>
+                  </div>
+                  <div className="flex flex-col items-center ml-4">
+                    <Weather latitude={selectedPlace.latitude} longitude={selectedPlace.longitude} /> {/* Wetterkomponente */}
+                  </div>
                 </div>
               </div>
+  
               <IconButton
                 onClick={closeModal}
                 sx={{
@@ -474,4 +426,5 @@ export default function Home() {
       )}
     </GeistProvider>
   );
+  
 }
