@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Box, CircularProgress, Typography, IconButton, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Modal, Box, CircularProgress, Typography, IconButton, MenuItem, Select, SelectChangeEvent, Link } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 interface OverpassElement {
@@ -212,10 +212,13 @@ const SecondChildModal: React.FC<SecondChildModalProps> = ({ latitude, longitude
                     {groupedPlaces[category].map((place) => {
                       const distance = haversineDistance(latitude, longitude, place.lat, place.lon);
                       const distanceText = !isNaN(distance) ? `(${distance.toFixed(2)} km)` : '';
+                      const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(place.tags?.name || '')}`;
                       return (
                         <li key={place.id} style={listItemStyle}>
                           <Typography variant="subtitle1" component="span">
-                            {place.tags?.name} {distanceText}
+                            <Link href={googleSearchUrl} target="_blank" rel="noopener noreferrer" color="inherit">
+                              {place.tags?.name} {distanceText}
+                            </Link>
                           </Typography>
                         </li>
                       );
