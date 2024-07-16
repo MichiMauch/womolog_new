@@ -1,4 +1,5 @@
 "use client";
+import './globals.css';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Modal, Box, Typography, CircularProgress, IconButton, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
