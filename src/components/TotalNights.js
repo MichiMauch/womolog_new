@@ -20,9 +20,11 @@ const TotalNights = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Gesamtzahl der Übernachtungen</h2>
-      <p>{totalNights} Übernachtungen</p>
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="text-gray-500 text-sm mb-1">Total Übernachtungen</div>
+        <div className="text-black text-4xl font-semibold">{totalNights}</div>
+      </div>
     </div>
   );
 };

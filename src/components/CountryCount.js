@@ -25,9 +25,11 @@ const CountryCount = () => {
   }
 
   return (
-    <div>
-      <h2>Anzahl der besuchten Länder</h2>
-      <p>{countryCount}</p>
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="text-gray-500 text-sm mb-1">Anzahl Länder</div>
+        <div className="text-black text-4xl font-semibold">{countryCount}</div>
+      </div>
     </div>
   );
 };

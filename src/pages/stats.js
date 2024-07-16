@@ -1,5 +1,6 @@
 import React from 'react';
 import 'leaflet/dist/leaflet.css';
+import '../app/globals.css';
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
 import CountryCount from '../components/CountryCount'; // Pfad anpassen, falls notwendig
 import CountryList from '../components/CountryList'; // Pfad anpassen, falls notwendig
@@ -21,69 +22,95 @@ import LongestPause from '../components/LongestPause'; // Pfad anpassen, falls n
 import TotalDistancePerYear from '../components/TotalDistancePerYear'; // Pfad anpassen, falls notwendig
 import TotalDistance from '../components/TotalDistance'; // Pfad anpassen, falls notwendig
 
-
 const Stats = () => {
   return (
     <GeistProvider>
       <CssBaseline />
-      <div style={{ padding: '20px' }}>
-        <h1>Statistiken</h1>
-        <div style={{ marginBottom: '40px' }}>
-          <CountryCount />
+      <div className="bg-black ontainer mx-auto p-2 lg:p-4">
+        {/* Eine Box */}
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
+          <div className="box p-2 border rounded bg-gray-100">
+            <TotalVisitedPlaces />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <TotalNights />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <AverageNightsPerPlace />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <CountryCount />
+          </div>
         </div>
-        <div style={{ marginBottom: '40px' }}>
-          <CountryList />
+
+        {/* Zwei Boxen */}
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-4 mb-4">
+          <div className="box p-2 border rounded bg-gray-100 col-span-1">
+            <CountryList />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100 col-span-3">
+            <VisitsPerYear />
+          </div>
         </div>
-        <div style={{ marginBottom: '40px' }}>
+
+        {/* Drei Boxen */}
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-4">
+          <div className="box p-2 border rounded bg-gray-100">
           <CountryPlaces />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <NewPlacesPerYear />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <TotalVisitedPlaces />
+          </div>
         </div>
-        <div style={{ marginBottom: '40px' }}>
-          <VisitsPerYear />
+
+        {/* Vier Boxen */}
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
+          <div className="box p-2 border rounded bg-gray-100">
+            <DuplicateTitles />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <VisitsPerCountry />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <MultipleVisitsPerPlacePerCountry />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <TotalNights />
+          </div>
         </div>
-        <div style={{ marginBottom: '40px' }}>
-          <NewPlacesPerYear />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <TotalVisitedPlaces />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <DuplicateTitles />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <VisitsPerCountry />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <MultipleVisitsPerPlacePerCountry />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <TotalNights />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <AverageNightsPerPlace />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <LongestTrip />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <MostNightsPlace />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <SeasonAnalysis />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <PopularMonth />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <MostVisitedPlaces />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <LongestPause />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <TotalDistancePerYear />
-        </div>
-        <div style={{ marginBottom: '40px' }}>
-          <TotalDistance />
+
+        {/* Weitere Boxen */}
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
+          <div className="box p-2 border rounded bg-gray-100">
+            <AverageNightsPerPlace />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <LongestTrip />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <MostNightsPlace />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <SeasonAnalysis />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <PopularMonth />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <MostVisitedPlaces />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <LongestPause />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <TotalDistancePerYear />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <TotalDistance />
+          </div>
         </div>
       </div>
     </GeistProvider>

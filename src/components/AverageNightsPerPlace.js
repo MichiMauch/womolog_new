@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaChartBar } from 'react-icons/fa'; // Beispiel für ein Icon, das du verwenden könntest
 import { calculateStatistics } from '../../utils/statistics'; // Pfad anpassen, falls notwendig
 
 const AverageNightsPerPlace = () => {
@@ -20,9 +21,15 @@ const AverageNightsPerPlace = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Durchschnittliche Übernachtungen pro Ort</h2>
-      <p>{averageNights.toFixed(2)} Nächte</p> {/* Anzeige auf zwei Dezimalstellen gerundet */}
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="flex items-center text-gray-500 text-sm mb-1 flex items-center">
+        Ø Übernachtungen pro Ort
+        </div>
+        <div className="text-black text-4xl font-semibold">
+          {averageNights.toFixed(2)} Nächte {/* Anzeige auf zwei Dezimalstellen gerundet */}
+        </div>
+      </div>
     </div>
   );
 };

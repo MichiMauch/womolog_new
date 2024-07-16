@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { FaMapMarkerAlt, FaChartBar } from 'react-icons/fa'; // Importiere Icons
 import { calculateStatistics } from '../../utils/statistics'; // Pfad anpassen, falls notwendig
 
 const TotalVisitsAndUniquePlaces = () => {
