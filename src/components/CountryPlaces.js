@@ -3,16 +3,14 @@ import { calculateStatistics } from '../../utils/statistics'; // Pfad anpassen, 
 
 const VisitsPerCountry = () => {
   const [visitsPerCountry, setVisitsPerCountry] = useState({});
-  const [totalVisits, setTotalVisits] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('/api/sheetData');
         const data = await response.json();
-        const { visitsPerCountry, totalVisits } = calculateStatistics(data);
+        const { visitsPerCountry } = calculateStatistics(data);
         setVisitsPerCountry(visitsPerCountry);
-        setTotalVisits(totalVisits);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -29,9 +27,9 @@ const VisitsPerCountry = () => {
     <div>
       <h2>Besuche pro Land</h2>
       <ul>
-        {Object.entries(visitsPerCountry).map(([country, { visitCount, multipleVisitedPlaces, nights }]) => (
+        {Object.entries(visitsPerCountry).map(([country, { visitCount, nights }]) => (
           <li key={country}>
-            {country}: {visitCount} Besuche {multipleVisitedPlaces > 0 && `- ${multipleVisitedPlaces} mehrfach besuchte Orte`} {nights > 0 && `- ${nights} Nächte`}
+            {country}: {visitCount} Besuche {nights > 0 && `- ${nights} Nächte`}
           </li>
         ))}
       </ul>

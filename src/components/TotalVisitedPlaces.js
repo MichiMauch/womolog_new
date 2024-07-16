@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaMapMarkerAlt, FaChartBar } from 'react-icons/fa'; // Importiere Icons
 import { calculateStatistics } from '../../utils/statistics'; // Pfad anpassen, falls notwendig
 
 const TotalVisitsAndUniquePlaces = () => {
@@ -20,12 +21,19 @@ const TotalVisitsAndUniquePlaces = () => {
 
     fetchData();
   }, []);
-
+  
   return (
-    <div>
-      <h2>Gesamtstatistik</h2>
-      <p><strong>Gesamtzahl der Besuche: {totalVisits}</strong></p>
-      <p><strong>Gesamtzahl der einzigartigen Orte: {totalUniquePlaces}</strong></p>
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="text-gray-500 text-sm mb-1">Total Besuchte Orte</div>
+        <div className="text-black text-4xl font-semibold">{totalVisits}</div>
+      </div>
+      {/*
+    <div className="flex flex-col items-start p-4">
+      <div className="text-gray-500 text-sm mb-1">Besuchte Orte</div>
+      <div className="text-black text-4xl font-semibold">{totalUniquePlaces}</div>
+    </div>
+    */}
     </div>
   );
 };

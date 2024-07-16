@@ -1,24 +1,25 @@
 import React from 'react';
+import 'leaflet/dist/leaflet.css';
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
-import CountryCount from '../component/CountryCount'; // Pfad anpassen, falls notwendig
-import CountryList from '../component/CountryList'; // Pfad anpassen, falls notwendig
-import CountryPlaces from '../component/CountryPlaces'; // Pfad anpassen, falls notwendig
-import VisitsPerYear from '../component/VisitsPerYear'; // Pfad anpassen, falls notwendig
-import TotalVisitedPlaces from '../component/TotalVisitedPlaces'; // Pfad anpassen, falls notwendig
-import DuplicateTitles from '../component/DuplicateTitles'; // Pfad anpassen, falls notwendig
-import VisitsPerCountry from '../component/VisitsPerCountry'; // Pfad anpassen, falls notwendig
-import MultipleVisitsPerPlacePerCountry from '../component/MultipleVisitsPerPlacePerCountry'; // Pfad anpassen, falls notwendig
-import NewPlacesPerYear from '../component/NewPlacesPerYear'; // Pfad anpassen, falls notwendig
-import TotalNights from '../component/TotalNights'; // Pfad anpassen, falls notwendig
-import AverageNightsPerPlace from '../component/AverageNightsPerPlace'; // Pfad anpassen, falls notwendig
-import LongestTrip from '../component/LongestTrip'; // Pfad anpassen, falls notwendig
-import MostNightsPlace from '../component/MostNightsPlace'; // Pfad anpassen, falls notwendig
-import SeasonAnalysis from '../component/SeasonAnalysis'; // Pfad anpassen, falls notwendig
-import PopularMonth from '../component/PopularMonth'; // Pfad anpassen, falls notwendig
-import MostVisitedPlaces from '../component/MostVisitedPlaces'; // Pfad anpassen, falls notwendig
-import LongestPause from '../component/LongestPause'; // Pfad anpassen, falls notwendig
-import TotalDistancePerYear from '../component/TotalDistancePerYear'; // Pfad anpassen, falls notwendig
-import TotalDistance from '../component/TotalDistance'; // Pfad anpassen, falls notwendig
+import CountryCount from '../components/CountryCount'; // Pfad anpassen, falls notwendig
+import CountryList from '../components/CountryList'; // Pfad anpassen, falls notwendig
+import CountryPlaces from '../components/CountryPlaces'; // Pfad anpassen, falls notwendig
+import VisitsPerYear from '../components/VisitsPerYear'; // Pfad anpassen, falls notwendig
+import TotalVisitedPlaces from '../components/TotalVisitedPlaces'; // Pfad anpassen, falls notwendig
+import DuplicateTitles from '../components/DuplicateTitles'; // Pfad anpassen, falls notwendig
+import VisitsPerCountry from '../components/VisitsPerCountry'; // Pfad anpassen, falls notwendig
+import MultipleVisitsPerPlacePerCountry from '../components/MultipleVisitsPerPlacePerCountry'; // Pfad anpassen, falls notwendig
+import NewPlacesPerYear from '../components/NewPlacesPerYear'; // Pfad anpassen, falls notwendig
+import TotalNights from '../components/TotalNights'; // Pfad anpassen, falls notwendig
+import AverageNightsPerPlace from '../components/AverageNightsPerPlace'; // Pfad anpassen, falls notwendig
+import LongestTrip from '../components/LongestTrip'; // Pfad anpassen, falls notwendig
+import MostNightsPlace from '../components/MostNightsPlace'; // Pfad anpassen, falls notwendig
+import SeasonAnalysis from '../components/SeasonAnalysis'; // Pfad anpassen, falls notwendig
+import PopularMonth from '../components/PopularMonth'; // Pfad anpassen, falls notwendig
+import MostVisitedPlaces from '../components/MostVisitedPlaces'; // Pfad anpassen, falls notwendig
+import LongestPause from '../components/LongestPause'; // Pfad anpassen, falls notwendig
+import TotalDistancePerYear from '../components/TotalDistancePerYear'; // Pfad anpassen, falls notwendig
+import TotalDistance from '../components/TotalDistance'; // Pfad anpassen, falls notwendig
 
 
 const Stats = () => {

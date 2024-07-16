@@ -8,12 +8,12 @@ import InfoIcon from '@mui/icons-material/Info'; // Neues Icon importieren
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import dynamic from 'next/dynamic';
-import Header from '../component/Header'; // Import the updated Header component
-import SecondChildModal from '../component/SecondChildModal'; // Neues Child-Modal importieren
-import Weather from '../component/Weather'; // Import the Weather component
-import AnimatedRV from '../component/AnimatedRV';
+import Header from '../components/Header'; // Import the updated Header component
+import SecondChildModal from '../components/SecondChildModal'; // Neues Child-Modal importieren
+import Weather from '../components/Weather'; // Import the Weather component
+import AnimatedRV from '../components/AnimatedRV';
 
-const MapComponent = dynamic(() => import('../component/map'), {
+const MapComponent = dynamic(() => import('../components/map'), {
   ssr: false,
 });
 

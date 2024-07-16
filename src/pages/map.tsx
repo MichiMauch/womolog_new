@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { CircularProgress, Box } from '@mui/material';
 
 // Dynamisches Importieren der Karte
-const Map = dynamic(() => import('../component/LeafletMap'), { ssr: false });
+const Map = dynamic(() => import('../components/LeafletMap'), { ssr: false });
 
 const MapPage = () => {
   const [data, setData] = useState([]);
