@@ -97,7 +97,7 @@ export default async function handler(req, res) {
 
   try {
     const distance = await calculateRouteDistance(waypoints);
-    res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=59'); // Caching Header für 24 Stunden
+    res.setHeader('Cache-Control', 'public, s-maxage=172800, stale-while-revalidate=59'); // Caching Header für 24 Stunden
     res.status(200).json({ distance });
   } catch (error) {
     res.status(500).json({ error: 'Failed to calculate route distance' });
