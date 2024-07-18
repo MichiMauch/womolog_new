@@ -1,0 +1,12 @@
+{
+    "version": 2,
+    "routes": [
+      {
+        "src": "/api/route-service",
+        "headers": {
+          "cache-control": "s-maxage=172800, stale-while-revalidate"
+        }
+      }
+    ]
+  }
+  
