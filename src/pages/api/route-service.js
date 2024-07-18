@@ -1,4 +1,4 @@
-import { calculateRouteDistance } from '../../../utils/calculateRouteDistance';
+import { calculateTotalDistance } from '../../../utils/calculateRouteDistance';
 
 export default async function handler(req, res) {
     try {
@@ -10,7 +10,7 @@ export default async function handler(req, res) {
         const parsedWaypoints = JSON.parse(waypoints);
 
         // Berechne die Distanz
-        const distance = await calculateRouteDistance(parsedWaypoints);
+        const distance = await calculateTotalDistance(parsedWaypoints);
 
         // Setze Cache-Control-Header
         const cacheTtl = 172800; // 48 Stunden
@@ -23,3 +23,4 @@ export default async function handler(req, res) {
         res.status(500).json({ error: error.message });
     }
 }
+T
