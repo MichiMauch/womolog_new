@@ -9,7 +9,7 @@ export async function calculateRouteDistance(waypoints) {
     }
 
     const coordinates = waypoints.map(point => [point[1], point[0]]);
-    const radiuses = Array(coordinates.length).fill(1900); // Erhöhe den Suchradius auf 500 Meter
+    const radiuses = Array(coordinates.length).fill(1900); // Erhöhe den Suchradius auf 1900 Meter
     const requestBody = {
         coordinates: coordinates,
         format: 'geojson',
@@ -49,4 +49,14 @@ export async function calculateRouteDistance(waypoints) {
         }
         throw new Error('Failed to fetch route data');
     }
+}
+
+export async function calculateTotalDistance(waypoints) {
+    let totalDistance = 0;
+    for (let i = 0; i < waypoints.length; i += MAX_WAYPOINTS) {
+        const chunk = waypoints.slice(i, i + MAX_WAYPOINTS);
+        const distance = await calculateRouteDistance(chunk);
+        totalDistance += distance;
+    }
+    return totalDistance;
 }
