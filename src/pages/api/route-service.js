@@ -1,4 +1,4 @@
-import { calculateTotalDistance } from '../../utils/calculateRouteDistance';
+import { calculateTotalDistance } from '../../../utils/calculateRouteDistance';
 
 export default async function handler(req, res) {
     try {
