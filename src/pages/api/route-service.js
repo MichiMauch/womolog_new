@@ -1,5 +1,7 @@
 import { calculateTotalDistance } from '../../../utils/calculateRouteDistance';
 
+console.log('route-service.js loaded');
+
 export default async function handler(req, res) {
     try {
         const { waypoints } = req.query;

@@ -3,7 +3,11 @@ import axios from 'axios';
 const API_KEY = process.env.NEXT_PUBLIC_OPENROUTESERVICE_API_KEY;
 const MAX_WAYPOINTS = 50; // Beispiel für das Limit
 
+console.log('calculateRouteDistance.js loaded');
+
 export async function calculateRouteDistance(waypoints) {
+    console.log('calculateRouteDistance called with waypoints:', waypoints);
+
     if (waypoints.length > MAX_WAYPOINTS) {
         throw new Error(`Too many waypoints: ${waypoints.length}. The maximum number of waypoints is ${MAX_WAYPOINTS}.`);
     }
@@ -35,6 +39,7 @@ export async function calculateRouteDistance(waypoints) {
             if (route && route.segments) {
                 const distance = route.segments.reduce((total, segment) => total + segment.distance, 0);
                 const distanceInKm = distance / 1000;
+                console.log('Calculated Distance in Km:', distanceInKm);
                 return distanceInKm;
             } else {
                 throw new Error('Invalid route properties');
@@ -52,11 +57,15 @@ export async function calculateRouteDistance(waypoints) {
 }
 
 export async function calculateTotalDistance(waypoints) {
+    console.log('calculateTotalDistance called with waypoints:', waypoints);
+
     let totalDistance = 0;
     for (let i = 0; i < waypoints.length; i += MAX_WAYPOINTS) {
         const chunk = waypoints.slice(i, i + MAX_WAYPOINTS);
+        console.log(`Processing chunk from ${i} to ${i + MAX_WAYPOINTS}:`, chunk);
         const distance = await calculateRouteDistance(chunk);
         totalDistance += distance;
     }
+    console.log('Total Distance:', totalDistance);
     return totalDistance;
 }
