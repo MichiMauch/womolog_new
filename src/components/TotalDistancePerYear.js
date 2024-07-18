@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { calculateRouteDistance } from '../../utils/route-service';
+import { calculateTotalDistance } from '../../utils/calculateRouteDistance';
 
 // Funktion zum Parsen von Datumsangaben im Format dd.mm.yyyy
 function parseDate(dateString) {
@@ -68,7 +68,7 @@ const TotalDistance = () => {
                     // Debugging-Ausgabe der Waypoints
                     console.log(`Waypoints for ${year}:`, waypoints);
 
-                    const distance = await calculateRouteDistance(waypoints);
+                    const distance = await calculateTotalDistance(waypoints);
                     distances[year] = Math.round(distance); // Ausgabe auf ganze Kilometer runden
                 }
 
