@@ -1,4 +1,4 @@
-import { calculateTotalDistance } from '../../utils/calculateRouteDistance';
+import { calculateTotalDistance } from '../../../utils/calculateRouteDistance';
 
 console.log('route-service.js loaded');
 
