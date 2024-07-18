@@ -9,12 +9,14 @@ export default async function handler(req, res) {
 
         const parsedWaypoints = JSON.parse(waypoints);
 
-        // Set cache headers
+        // Berechne die Distanz
+        const distance = await calculateRouteDistance(parsedWaypoints);
+
+        // Setze Cache-Control-Header
         const cacheTtl = 172800; // 48 Stunden
         res.setHeader('Cache-Control', `s-maxage=${cacheTtl}, stale-while-revalidate`);
 
-        // Distance berechnen und ausgeben
-        const distance = await calculateRouteDistance(parsedWaypoints);
+        // Sende die Antwort mit dem Cache-Header
         res.status(200).json({ distance });
     } catch (error) {
         console.error('API Error:', error.message);
