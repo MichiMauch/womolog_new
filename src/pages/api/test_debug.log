@@ -1,0 +1,59 @@
+Handler function called
+calculateRouteDistance function called
+Cache key: [[13.38886,52.517037],[13.397634,52.529407],[13.428555,52.523219]]
+Waypoints: [
+  [
+    13.38886,
+    52.517037
+  ],
+  [
+    13.397634,
+    52.529407
+  ],
+  [
+    13.428555,
+    52.523219
+  ]
+]
+Coordinates for API: [
+  [
+    52.517037,
+    13.38886
+  ],
+  [
+    52.529407,
+    13.397634
+  ],
+  [
+    52.523219,
+    13.428555
+  ]
+]
+Request Body: {
+  "coordinates": [
+    [
+      52.517037,
+      13.38886
+    ],
+    [
+      52.529407,
+      13.397634
+    ],
+    [
+      52.523219,
+      13.428555
+    ]
+  ],
+  "format": "geojson"
+}
+Error fetching route data: Request failed with status code 401
+Error Response Status: 401
+Error Response Data: {
+  "error": "Authorization field missing"
+}
+Error Code: undefined
+Error Message: undefined
+Error in handler: Failed to fetch route data
+Response status 500: {
+  "error": "Failed to calculate route distance"
+}
