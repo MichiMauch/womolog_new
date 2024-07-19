@@ -85,59 +85,49 @@ const VisitsPerCountry = () => {
   ];
 
   return (
-    <div>
-      <h2>Besuche pro Land</h2>
-      <ul>
-        {Object.entries(visitsPerCountry).map(([country, { visitCount, multipleVisitedPlaces, nights }]) => (
-          <li key={country}>
-            {country}: {visitCount} Besuche {multipleVisitedPlaces > 0 && `- ${multipleVisitedPlaces} mehrfach besuchte Orte`} {nights > 0 && `- ${nights} Nächte`}
-          </li>
-        ))}
-      </ul>
-      <div style={{ width: "100%", height: "500px", position: "relative" }}>
-        <MapContainer center={[50, 10]} zoom={4} minZoom={3} maxZoom={6} style={{ height: "100%", width: "100%" }} bounds={europeBounds}>
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <GeoJSON data={geoData} onEachFeature={onEachFeature} />
-          {capitalCities.map(city => {
-            const isoA2 = city.properties.ISO2;
-            const isoA3 = city.properties.ISO3;
-            const countryData = visitsPerCountry[isoA3];
+    <div style={{ width: "100%", height: "100vh", margin: "0", padding: "0" }}>
+      <MapContainer center={[50, 10]} zoom={4} minZoom={3} maxZoom={6} style={{ height: "100%", width: "100%" }} bounds={europeBounds}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <GeoJSON data={geoData} onEachFeature={onEachFeature} />
+        {capitalCities.map(city => {
+          const isoA2 = city.properties.ISO2;
+          const isoA3 = city.properties.ISO3;
+          const countryData = visitsPerCountry[isoA3];
 
-            if (!isoA2 || !countryData) {
-              return null; // Skip if iso_a2 or the country has not been visited
-            }
+          if (!isoA2 || !countryData) {
+            return null; // Skip if iso_a2 or the country has not been visited
+          }
 
-            const flagUrl = `https://flagcdn.com/48x36/${isoA2.toLowerCase()}.png`;
-            const countryName = countryNames ? (countryNames[isoA3] || city.properties["Country"]) : city.properties["Country"];
+          const flagUrl = `https://flagcdn.com/48x36/${isoA2.toLowerCase()}.png`;
+          const countryName = countryNames ? (countryNames[isoA3] || city.properties["Country"]) : city.properties["Country"];
 
-            return (
-              <Marker 
-                key={city.properties.ISO3} 
-                position={[city.geometry.coordinates[1], city.geometry.coordinates[0]]} 
-                icon={L.icon({
-                  iconUrl: flagUrl,
-                  iconSize: [36, 24],
-                  iconAnchor: [18, 12],
-                  popupAnchor: [0, -12],
-                })}
-              >
-                <Popup>
-                  <div style={{ textAlign: 'center' }}>
-                    <h3>{countryName}</h3>
-                    <img src={flagUrl} alt={`${city.properties["Capital City"]} flag`} />
-                    <p>Besuchte Orte: {countryData.visitCount}
-                    <br />Anzahl Nächte: {countryData.nights}</p>
-                    <p><a href="https://www.womolog.ch" target="_blank" rel="noopener noreferrer">www.womolog.ch</a></p>
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          })}
-        </MapContainer>
-      </div>
+          return (
+            <Marker 
+              key={city.properties.ISO3} 
+              position={[city.geometry.coordinates[1], city.geometry.coordinates[0]]} 
+              icon={L.icon({
+                iconUrl: flagUrl,
+                iconSize: [36, 24],
+                iconAnchor: [18, 12],
+                popupAnchor: [0, -12],
+              })}
+            >
+              <Popup>
+                <div style={{ textAlign: 'center' }}>
+                  <h3>{countryName}</h3>
+                  <img src={flagUrl} alt={`${city.properties["Capital City"]} flag`} />
+                  <p>Besuchte Orte: {countryData.visitCount}
+                  <br />Anzahl Nächte: {countryData.nights}</p>
+                  <p><a href="https://www.womolog.ch" target="_blank" rel="noopener noreferrer">www.womolog.ch</a></p>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MapContainer>
     </div>
   );
 };

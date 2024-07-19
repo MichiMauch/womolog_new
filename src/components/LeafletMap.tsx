@@ -1,3 +1,4 @@
+// components/LeafletMap.tsx
 import React, { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -16,8 +17,17 @@ L.Icon.Default.mergeOptions({
   shadowAnchor: [16, 32],
 });
 
-const LeafletMap = ({ data }) => {
-  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lon: number } | null>(null);
+type Location = {
+  lat: number;
+  lon: number;
+};
+
+type Props = {
+  data: [string, string, string, string, string, number, number][];
+};
+
+const LeafletMap: React.FC<Props> = ({ data }) => {
+  const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
   const [map, setMap] = useState<L.Map | null>(null);
 
   useEffect(() => {
@@ -36,7 +46,6 @@ const LeafletMap = ({ data }) => {
 
   useEffect(() => {
     if (map && data.length > 0) {
-      // Add markers to the map
       data.forEach(([title, location, dateFrom, dateTo, imageLinks, latitude, longitude]) => {
         if (latitude && longitude) {
           const imageUrl = imageLinks ? `https://pub-7b46ce1a4c0f4ff6ad2ed74d56e2128a.r2.dev/${imageLinks}.webp` : '';
@@ -55,7 +64,7 @@ const LeafletMap = ({ data }) => {
             </div>
           `;
           L.marker([latitude, longitude])
-            .addTo(map)
+            .addTo(map!)
             .bindPopup(popupContent);
         }
       });
@@ -91,7 +100,7 @@ const LeafletMap = ({ data }) => {
       >
         Aktuellen Standort abrufen
       </button>
-      <div id="map" style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}></div>
+      <div id="map" style={{ width: '100%', height: '100%' }}></div>
     </>
   );
 };

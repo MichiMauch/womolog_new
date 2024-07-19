@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { calculateTotalDistance } from '../../utils/calculateRouteDistance';
+//import { calculateTotalDistance } from '../../utils/calculateRouteDistance';
 
 // Funktion zum Parsen von Datumsangaben im Format dd.mm.yyyy
 function parseDate(dateString) {

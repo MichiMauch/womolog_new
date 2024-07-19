@@ -23,7 +23,7 @@ const VisitsPerYearChart = () => {
           labels,
           datasets: [
             {
-              label: 'Orte',
+              label: 'Orte und ',
               data: visitCounts,
               backgroundColor: '#67BFFF', // Neue Farbe
               borderColor: '#67BFFF', 
@@ -59,36 +59,41 @@ const VisitsPerYearChart = () => {
   const customLegend = (chartData) => {
     const { datasets } = chartData;
     if (!datasets) return null;
+
+    const legendItems = datasets.map((dataset, index) => (
+      <div key={index} className="flex items-center">
+        <span
+          style={{
+            display: 'block',
+            width: '0.5rem',
+            height: '0.5rem',
+            borderRadius: '9999px',
+            marginRight: '0.5rem',
+            borderWidth: '3px',
+            borderColor: dataset.borderColor,
+            pointerEvents: 'none',
+            backgroundColor: 'white',
+          }}
+        ></span>
+        <span className="ml-2 text-gray-500 text-sm">{dataset.label}</span>
+      </div>
+    ));
+
     return (
       <div className="flex space-x-4">
-        {datasets.map((dataset, index) => (
-          <div key={index} className="flex items-center">
-            <span
-              style={{
-                display: 'block',
-                width: '0.5rem',
-                height: '0.5rem',
-                borderRadius: '9999px',
-                marginRight: '0.5rem',
-                borderWidth: '3px',
-                borderColor: dataset.borderColor,
-                pointerEvents: 'none',
-                backgroundColor: 'white',
-              }}
-            ></span>
-            <span className="ml-2 text-black text-4xl font-semibold">{dataset.label}</span>
-          </div>
-        ))}
+        {legendItems}
       </div>
     );
   };
 
   return (
-    <div className="p-4 bg-white">
-      <div className="text-gray-500 text-sm mb-1">Orte und Übernachtungen pro Jahr</div>
-      <div id="legend-container" className="mt-1">
-        {customLegend(chartData)}
+    <div className="p-4  bg-gray-100" style={{ height: '100vh' }}>
+      <div className="flex items-center">
+        <div className="text-gray-500 text-sm mb-1 flex items-center">
+          {customLegend(chartData)}
+        </div>
       </div>
+      <div style={{ height: "100%", width: "100%" }}> {/* 32px ist ein Beispielwert für die Höhe des Legenden-Containers */}
       <Bar
         data={chartData}
         options={{
@@ -135,6 +140,7 @@ const VisitsPerYearChart = () => {
           },
         }}
       />
+    </div>
     </div>
   );
 };
