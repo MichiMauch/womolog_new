@@ -1,4 +1,3 @@
-// pages/stats.js
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
@@ -49,9 +48,8 @@ const Stats = () => {
   return (
     <GeistProvider>
       <CssBaseline />
-      <div className="bg-black container mx-auto p-2 lg:p-4">
-        {/* Eine Box */}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
+      <div className="bg-black mx-auto p-4" style={{ maxWidth: '100%', padding: '16px 16px' }}>
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 xl:grid-cols-5 mb-4">
           <div className="box p-2 border rounded bg-gray-100">
             <TotalVisitedPlaces />
           </div>
@@ -64,16 +62,18 @@ const Stats = () => {
           <div className="box p-2 border rounded bg-gray-100">
             <LongestTrip />
           </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <LongestPause />
+          </div>
         </div>
 
         {/* Zwei Boxen */}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-4 mb-4">
           <div className="box border rounded bg-gray-100 col-span-2">
             {/* Karte */}
-        <div className="box border rounded bg-gray-100" style={{ height: '100%', position: 'relative' }}>
-          {!isLoading && <Map data={data} />}
-        </div>
-           
+            <div className="box border rounded bg-gray-100" style={{ height: '100%', position: 'relative' }}>
+              {!isLoading && <Map data={data} />}
+            </div>
           </div>
           <div className="box border rounded bg-gray-100 col-span-2">
             <VisitsPerCountry />
@@ -109,7 +109,7 @@ const Stats = () => {
         {/* Weitere Boxen */}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
           <div className="box p-2 border rounded bg-gray-100">
-          <VisitsPerYear />
+            <VisitsPerYear />
           </div>
           <div className="box p-2 border rounded bg-gray-100">
             <CountryCount />
@@ -136,8 +136,6 @@ const Stats = () => {
             <TotalDistance />
           </div>
         </div>
-
-        
       </div>
     </GeistProvider>
   );

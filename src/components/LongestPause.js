@@ -20,9 +20,11 @@ const LongestPause = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Längste Pause zwischen zwei Reisen</h2>
-      <p>{longestPause} Tage</p>
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="text-gray-500 text-sm mb-1">Längste Zeit ohne Reise</div>
+        <div className="text-black text-4xl font-semibold">{longestPause} Tage</div>
+      </div>
     </div>
   );
 };
