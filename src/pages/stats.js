@@ -70,8 +70,7 @@ const Stats = () => {
         {/* Zwei Boxen */}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-4 mb-4">
           <div className="box border rounded bg-gray-100 col-span-2">
-            {/* Karte */}
-            <div className="box border rounded bg-gray-100" style={{ height: '100%', position: 'relative' }}>
+            <div className="box border rounded bg-gray-100" style={{ width: '100%', height: '100%', position: 'relative' }}>
               {!isLoading && <Map data={data} />}
             </div>
           </div>
