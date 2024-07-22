@@ -29,19 +29,53 @@ type Props = {
 const LeafletMap: React.FC<Props> = ({ data }) => {
   const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
   const [map, setMap] = useState<L.Map | null>(null);
+  const [showInfo, setShowInfo] = useState(false);
+  const [infoTimeout, setInfoTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [infoText, setInfoText] = useState('Use ⌘ + scroll to zoom the map');
 
   useEffect(() => {
-    const mapInstance = L.map('map').setView([47.3397817, 8.046936], 5); // Set initial coordinates and zoom level
+    const initializeMap = () => {
+      const mapInstance = L.map('map', {
+        scrollWheelZoom: false, // Deaktiviert das Zoomen mit dem Mausrad
+        dragging: true, // Aktiviert das Ziehen der Karte
+      }).setView([47.3397817, 8.046936], 5); // Set initial coordinates and zoom level
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(mapInstance);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(mapInstance);
 
-    setMap(mapInstance);
+      setMap(mapInstance);
 
-    return () => {
-      mapInstance.remove();
+      // Event-Listener hinzufügen, um das Scroll-Zooming zu steuern
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Meta' || e.key === 'Control') { // Command-Taste auf Mac und Ctrl-Taste auf Windows/Linux
+          mapInstance.scrollWheelZoom.enable();
+        }
+      };
+
+      const handleKeyUp = (e: KeyboardEvent) => {
+        if (e.key === 'Meta' || e.key === 'Control') { // Command-Taste auf Mac und Ctrl-Taste auf Windows/Linux
+          mapInstance.scrollWheelZoom.disable();
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('keyup', handleKeyUp);
+
+      return () => {
+        mapInstance.remove();
+        window.removeEventListener('keydown', handleKeyDown);
+        window.removeEventListener('keyup', handleKeyUp);
+      };
     };
+
+    initializeMap();
+
+    // Überprüfen, ob es sich um ein Mobilgerät handelt
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      setInfoText('Use two fingers to move the map');
+    }
   }, []);
 
   useEffect(() => {
@@ -82,6 +116,24 @@ const LeafletMap: React.FC<Props> = ({ data }) => {
     }
   };
 
+  const handleMouseEnter = () => {
+    if (infoTimeout) {
+      clearTimeout(infoTimeout);
+    }
+    setShowInfo(true);
+    const timeout = setTimeout(() => {
+      setShowInfo(false);
+    }, 2000);
+    setInfoTimeout(timeout);
+  };
+
+  const handleMouseLeave = () => {
+    if (infoTimeout) {
+      clearTimeout(infoTimeout);
+    }
+    setShowInfo(false);
+  };
+
   return (
     <>
       <button 
@@ -100,7 +152,31 @@ const LeafletMap: React.FC<Props> = ({ data }) => {
       >
         Aktuellen Standort abrufen
       </button>
-      <div id="map" style={{ width: '100%', height: '100%' }}></div>
+      <div 
+        id="map" 
+        style={{ width: '100%', height: '80vh', position: 'relative' }} 
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {showInfo && (
+          <div 
+            style={{ 
+              position: 'absolute', 
+              top: '50%', 
+              left: '50%', 
+              transform: 'translate(-50%, -50%)', 
+              zIndex: 2000, 
+              backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+              color: 'white',
+              padding: '10px', 
+              borderRadius: '5px', 
+              textAlign: 'center'
+            }}
+          >
+            {infoText}
+          </div>
+        )}
+      </div>
     </>
   );
 };

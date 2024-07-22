@@ -1,3 +1,4 @@
+// components/VisitsPerCountry.js
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { calculateStatistics } from '../../utils/statistics'; // Pfad anpassen, falls notwendig
@@ -18,7 +19,11 @@ const VisitsPerCountry = () => {
   const [geoData, setGeoData] = useState(null);
   const [capitalCities, setCapitalCities] = useState([]);
   const [L, setL] = useState(null);
+  const [map, setMap] = useState(null);
   const [countryNames, setCountryNames] = useState({});
+  const [showInfo, setShowInfo] = useState(false);
+  const [infoTimeout, setInfoTimeout] = useState(null);
+  const [infoText, setInfoText] = useState('Use ⌘ + scroll to zoom the map');
 
   const hoverColors = ['#67BFFF', '#8470FF'];
 
@@ -49,7 +54,39 @@ const VisitsPerCountry = () => {
     };
 
     fetchData();
+
+    // Überprüfen, ob es sich um ein Mobilgerät handelt
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      setInfoText('Use two fingers to move the map');
+    }
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Meta' || e.key === 'Control') {
+        if (map) {
+          map.scrollWheelZoom.enable();
+        }
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      if (e.key === 'Meta' || e.key === 'Control') {
+        if (map) {
+          map.scrollWheelZoom.disable();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [map]);
 
   if (Object.keys(visitsPerCountry).length === 0 || !geoData || !L) {
     return <div>Loading...</div>;
@@ -79,14 +116,45 @@ const VisitsPerCountry = () => {
     });
   };
 
+  const handleMouseEnter = () => {
+    if (infoTimeout) {
+      clearTimeout(infoTimeout);
+    }
+    setShowInfo(true);
+    const timeout = window.setTimeout(() => {
+      setShowInfo(false);
+    }, 2000);
+    setInfoTimeout(timeout);
+  };
+
+  const handleMouseLeave = () => {
+    if (infoTimeout) {
+      clearTimeout(infoTimeout);
+    }
+    setShowInfo(false);
+  };
+
   const europeBounds = [
     [34.5, -10.5], // Southwest coordinates
     [70, 40]      // Northeast coordinates
   ];
 
   return (
-    <div style={{ width: "100%", height: "100vh", margin: "0", padding: "0" }}>
-      <MapContainer center={[50, 10]} zoom={4} minZoom={3} maxZoom={6} style={{ height: "100%", width: "100%" }} bounds={europeBounds}>
+    <div style={{ width: "100%", height: "80vh", margin: "0", padding: "0", position: 'relative' }} 
+         onMouseEnter={handleMouseEnter}
+         onMouseLeave={handleMouseLeave}>
+      <MapContainer 
+        center={[50, 10]} 
+        zoom={4} 
+        minZoom={3} 
+        maxZoom={6} 
+        style={{ height: "100%", width: "100%" }} 
+        bounds={europeBounds}
+        whenCreated={(mapInstance) => {
+          mapInstance.scrollWheelZoom.disable(); // Deaktiviert das Zoomen mit dem Mausrad standardmäßig
+          setMap(mapInstance);
+        }}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -128,6 +196,24 @@ const VisitsPerCountry = () => {
           );
         })}
       </MapContainer>
+      {showInfo && (
+        <div 
+          style={{ 
+            position: 'absolute', 
+            top: '50%', 
+            left: '50%', 
+            transform: 'translate(-50%, -50%)', 
+            zIndex: 1001, 
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+            color: 'white', 
+            padding: '10px', 
+            borderRadius: '5px', 
+            textAlign: 'center'
+          }}
+        >
+          {infoText}
+        </div>
+      )}
     </div>
   );
 };

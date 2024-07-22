@@ -35,6 +35,7 @@ const MapComponent = ({ latitude, longitude, enableClick, fullSize, showZoomCont
       style={{ height: fullSize ? '100%' : '135px', width: fullSize ? '100%' : '135px' }}
       zoomControl={showZoomControl}
       className="map-container"
+      
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
