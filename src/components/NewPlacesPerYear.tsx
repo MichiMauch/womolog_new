@@ -57,27 +57,31 @@ const NewPlacesPerYear: React.FC = () => {
   }
 
   return (
-    <div>
-      <h2>Neue Orte pro Jahr</h2>
-      <ul style={{ padding: 0, listStyleType: 'none' }}>
-        {Object.entries(newPlacesPerYear).map(([year, count]) => (
-          <li key={year} style={{ marginBottom: '10px', display: 'flex', alignItems: 'flex-start' }}>
-            <strong style={{ marginRight: '10px', flexShrink: 0 }}>{year}:</strong>
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-              {[...Array(count)].map((_, index) => {
-                const color = interpolateColor('#8470FF', '#67BFFF', index / (count - 1));
-                return (
-                  <FaMapMarkerAlt
-                    key={index}
-                    style={{ width: '20px', height: '20px', margin: '2px', color }} // Style anpassen
-                  />
-                );
-              })}
-              <span style={{ marginLeft: '5px', fontWeight: 'bold', color: '#000' }}>{count}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="text-gray-500 text-sm mb-1">Neue Orte pro Jahr</div>
+          <div className="text-black font-semibold">
+            <ul style={{ padding: 0, listStyleType: 'none' }}>
+              {Object.entries(newPlacesPerYear).map(([year, count]) => (
+                <li key={year} style={{ marginBottom: '10px', display: 'flex', alignItems: 'flex-start' }}>
+                  <strong style={{ marginRight: '10px', flexShrink: 0 }}>{year}:</strong>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                    {[...Array(count)].map((_, index) => {
+                      const color = interpolateColor('#8470FF', '#67BFFF', index / (count - 1));
+                      return (
+                        <FaMapMarkerAlt
+                          key={index}
+                          style={{ width: '20px', height: '20px', margin: '2px', color }} // Style anpassen
+                        />
+                      );
+                    })}
+                    <span style={{ marginLeft: '5px', fontWeight: 'bold', color: '#000' }}>{count}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
     </div>
   );
 };

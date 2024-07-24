@@ -87,13 +87,13 @@ const VisitsPerYearChart = () => {
   };
 
   return (
-    <div className="p-4  bg-gray-100" style={{ height: '100vh' }}>
+    <div className="p-4  bg-gray-100">
       <div className="flex items-center">
         <div className="text-gray-500 text-sm mb-1 flex items-center">
           {customLegend(chartData)}
         </div>
       </div>
-      <div style={{ height: "100%", width: "100%" }}> {/* 32px ist ein Beispielwert für die Höhe des Legenden-Containers */}
+      <div> {/* 32px ist ein Beispielwert für die Höhe des Legenden-Containers */}
       <Bar
         data={chartData}
         options={{

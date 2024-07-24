@@ -90,44 +90,27 @@ const Stats = () => {
           </div>
         </div>
 
-        {/* Vier Boxen */}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
-          <div className="box p-2 border rounded bg-gray-100">
+
+          <div className="box p-2 border rounded bg-gray-100 col-span-2">
+            <VisitsPerYear />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100 col-span-2">
             <DuplicateTitles />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
-            <CountryList />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
-            <MultipleVisitsPerPlacePerCountry />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
-            <TotalNights />
           </div>
         </div>
 
         {/* Weitere Boxen */}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
-          <div className="box p-2 border rounded bg-gray-100">
-            <VisitsPerYear />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
-            <CountryCount />
-          </div>
+        
+         
           <div className="box p-2 border rounded bg-gray-100">
             <MostNightsPlace />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
-            <SeasonAnalysis />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
-            <PopularMonth />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
             <MostVisitedPlaces />
           </div>
           <div className="box p-2 border rounded bg-gray-100">
-            <LongestPause />
+            <SeasonAnalysis />
+            <PopularMonth />
           </div>
           <div className="box p-2 border rounded bg-gray-100">
             <TotalDistancePerYear />

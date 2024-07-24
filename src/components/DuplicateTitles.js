@@ -10,7 +10,12 @@ const DuplicateTitles = () => {
         const response = await fetch('/api/sheetData');
         const data = await response.json();
         const { duplicateTitles } = calculateStatistics(data);
-        setDuplicateTitles(duplicateTitles);
+
+        // Sortieren der Titel nach Anzahl der Besuche in absteigender Reihenfolge
+        const sortedTitles = duplicateTitles.sort((a, b) => b.count - a.count);
+
+        // Nur die Top 10 Titel speichern
+        setDuplicateTitles(sortedTitles.slice(0, 5));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -20,15 +25,18 @@ const DuplicateTitles = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Liste der doppelten Titel</h2>
-      <ul>
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="text-gray-500 text-sm mb-1">Mehrfach besuchte Orte</div>
+        <div className="text-black font-semibold"><ul>
         {duplicateTitles.map(({ title, count, years }, index) => (
           <li key={index}>
             {title} - {count} Mal besucht ({years.join(', ')})
           </li>
         ))}
       </ul>
+      </div>
+      </div>
     </div>
   );
 };
