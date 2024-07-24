@@ -4,7 +4,7 @@ import { calculateStatistics } from '../../utils/statistics'; // Pfad anpassen, 
 const MostVisitedPlaces = () => {
   const [mostVisitedPlace, setMostVisitedPlace] = useState({ place: '', visits: 0 });
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchData = async () => {
       try {
         const response = await fetch('/api/sheetData');
@@ -20,9 +20,13 @@ const MostVisitedPlaces = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Meistbesuchte Orte</h2>
-      <p>{mostVisitedPlace.place}: {mostVisitedPlace.visits} Besuche</p>
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="text-gray-500 text-sm mb-1">Meistbesuchter Ort</div>
+        <div className="text-black text-4xl font-semibold">{mostVisitedPlace.visits} Besuche</div>
+        <div className="text-black text-sm mb-1">{mostVisitedPlace.place}</div>
+
+      </div>
     </div>
   );
 };

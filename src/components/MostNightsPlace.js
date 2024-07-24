@@ -6,7 +6,7 @@ const MostNightsPlace = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
+      try { 
         const response = await fetch('/api/sheetData');
         const data = await response.json();
         const { mostNights } = calculateStatistics(data);
@@ -20,9 +20,13 @@ const MostNightsPlace = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Meiste Übernachtungen in einem Ort</h2>
-      <p>{mostNightsPlace.place}: {mostNightsPlace.nights} Nächte</p>
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="text-gray-500 text-sm mb-1">Meiste Übernachtungen an einem Ort</div>
+        <div className="text-black text-4xl font-semibold">{mostNightsPlace.nights} Nächte </div>
+        <div className="text-black text-sm mb-1">{mostNightsPlace.place}</div>
+
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-//import { calculateRouteDistance } from '../pages/api/route-service';
+import { calculateTotalDistance } from '../../utils/calculateRouteDistance';
 
 // Funktion zum Parsen von Datumsangaben im Format dd.mm.yyyy
 function parseDate(dateString) {
@@ -7,9 +7,8 @@ function parseDate(dateString) {
     return new Date(year, month - 1, day); // month - 1, da Monate in JS von 0-11 sind
 }
 
-const TotalDistances = () => {
+const TotalDistance = () => {
     const [totalDistance, setTotalDistance] = useState(0);
-    const [yearlyDistances, setYearlyDistances] = useState({});
     const homeCoordinates = [47.33891, 8.05069];
 
     useEffect(() => {
@@ -18,52 +17,40 @@ const TotalDistances = () => {
                 const response = await fetch('/api/sheetData');
                 const data = await response.json();
 
-                // Gruppieren der Daten nach Jahren
-                const groupedData = data.reduce((acc, row) => {
-                    const startDate = parseDate(row[2]);
-                    const year = startDate.getFullYear();
-                    if (!acc[year]) {
-                        acc[year] = [];
-                    }
-                    acc[year].push(row);
-                    return acc;
-                }, {});
+                // Debugging-Ausgabe der Originaldaten
+                console.log('Original Data:', data);
 
-                const yearlyDistances = {};
+                // Extrahieren der Koordinaten für die gefilterten Daten
+                let waypoints = [];
 
-                for (const year in groupedData) {
-                    const dataForYear = groupedData[year];
+                for (let i = 0; i < data.length; i++) {
+                    const lat = parseFloat(data[i][5]);
+                    const lon = parseFloat(data[i][6]);
+                    const dateAb = parseDate(data[i][3]);
 
-                    // Extrahieren der Koordinaten für die gefilterten Daten
-                    let waypoints = [];
-                    for (let i = 0; i < dataForYear.length; i++) {
-                        const lat = parseFloat(dataForYear[i][5]);
-                        const lon = parseFloat(dataForYear[i][6]);
-                        const dateAb = parseDate(dataForYear[i][3]);
+                    if (!isNaN(lat) && !isNaN(lon)) {
+                        waypoints.push([lat, lon]);
 
-                        if (!isNaN(lat) && !isNaN(lon)) {
-                            waypoints.push([lat, lon]);
-
-                            if (i < dataForYear.length - 1) {
-                                const nextDateAn = parseDate(dataForYear[i + 1][2]);
-                                if (dateAb.getTime() !== nextDateAn.getTime()) {
-                                    waypoints.push(homeCoordinates);
-                                }
+                        if (i < data.length - 1) {
+                            const nextDateAn = parseDate(data[i + 1][2]);
+                            if (dateAb.getTime() !== nextDateAn.getTime()) {
+                                waypoints.push(homeCoordinates); // Zurück nach Hause
+                                waypoints.push(homeCoordinates); // Wieder von zu Hause starten
                             }
                         }
+                    } else {
+                        console.log(`Invalid coordinates: [${lat}, ${lon}] for row:`, data[i]);
                     }
-
-                    waypoints.unshift(homeCoordinates);
-                    waypoints.push(homeCoordinates);
-
-                    const distance = await calculateRouteDistance(waypoints);
-                    yearlyDistances[year] = distance;
                 }
 
-                const totalDistance = Object.values(yearlyDistances).reduce((acc, distance) => acc + distance, 0);
+                waypoints.unshift(homeCoordinates); // Start von zu Hause
+                waypoints.push(homeCoordinates); // Enden zu Hause
 
-                setYearlyDistances(yearlyDistances);
-                setTotalDistance(totalDistance);
+                // Debugging-Ausgabe der Waypoints
+                console.log('Waypoints:', waypoints);
+
+                const distance = await calculateTotalDistance(waypoints);
+                setTotalDistance(Math.round(distance)); // Ausgabe auf ganze Kilometer runden
             } catch (error) {
                 console.error('Error fetching or calculating data:', error);
             }
@@ -77,11 +64,14 @@ const TotalDistances = () => {
     }
 
     return (
-        <div>
-            <h2>Gesamtdistanzen</h2>
-            <p><strong>Gesamtdistanz: {totalDistance.toFixed(0)} km</strong></p>
-        </div>
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="text-gray-500 text-sm mb-1">Total gefahrene Kilometer</div>
+        <div className="text-black text-4xl font-semibold">{totalDistance}</div>
+
+      </div>
+    </div>
     );
 };
 
-export default TotalDistances;
+export default TotalDistance;

@@ -22,9 +22,11 @@ const PopularMonth = () => {
   const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 
   return (
-    <div>
-      <h2>Beliebtester Monat</h2>
-      <p>{monthNames[popularMonth - 1]}</p>
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start p-4">
+        <div className="text-gray-500 text-sm mb-1">Beliebtester Monat</div>
+        <div className="text-black text-4xl font-semibold">{monthNames[popularMonth - 1]}</div>
+      </div>
     </div>
   );
 };

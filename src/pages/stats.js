@@ -3,14 +3,11 @@ import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import '../app/globals.css';
 import { GeistProvider, CssBaseline } from '@geist-ui/core';
-import CountryCount from '../components/CountryCount'; // Pfad anpassen, falls notwendig
-import CountryList from '../components/CountryList'; // Pfad anpassen, falls notwendig
 import CountryPlaces from '../components/CountryPlaces'; // Pfad anpassen, falls notwendig
 import VisitsPerYear from '../components/VisitsPerYear'; // Pfad anpassen, falls notwendig
 import TotalVisitedPlaces from '../components/TotalVisitedPlaces'; // Pfad anpassen, falls notwendig
 import DuplicateTitles from '../components/DuplicateTitles'; // Pfad anpassen, falls notwendig
 import VisitsPerCountry from '../components/VisitsPerCountry'; // Pfad anpassen, falls notwendig
-import MultipleVisitsPerPlacePerCountry from '../components/MultipleVisitsPerPlacePerCountry'; // Pfad anpassen, falls notwendig
 import NewPlacesPerYear from '../components/NewPlacesPerYear'; // Pfad anpassen, falls notwendig
 import TotalNights from '../components/TotalNights'; // Pfad anpassen, falls notwendig
 import AverageNightsPerPlace from '../components/AverageNightsPerPlace'; // Pfad anpassen, falls notwendig
@@ -49,15 +46,12 @@ const Stats = () => {
     <GeistProvider>
       <CssBaseline />
       <div className="bg-black mx-auto p-4" style={{ maxWidth: '100%', padding: '16px 16px' }}>
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 xl:grid-cols-5 mb-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 mb-4">
           <div className="box p-2 border rounded bg-gray-100">
             <TotalVisitedPlaces />
           </div>
           <div className="box p-2 border rounded bg-gray-100">
             <TotalNights />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
-            <AverageNightsPerPlace />
           </div>
           <div className="box p-2 border rounded bg-gray-100">
             <LongestTrip />
@@ -79,7 +73,22 @@ const Stats = () => {
             <VisitsPerCountry />
           </div>
         </div>
-
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4"> 
+          <div className="box p-2 border rounded bg-gray-100">
+            <MostNightsPlace />
+            <MostVisitedPlaces />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <SeasonAnalysis />
+            <PopularMonth />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <AverageNightsPerPlace />
+          </div>
+          <div className="box p-2 border rounded bg-gray-100">
+            <TotalDistance />
+          </div>
+        </div>
         {/* Drei Boxen */}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-4">
           <div className="box p-2 border rounded bg-gray-100 col-span-2">
@@ -89,7 +98,11 @@ const Stats = () => {
             <NewPlacesPerYear />
           </div>
         </div>
-
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
+          <div className="col-span-1 sm:col-span-2 lg:col-span-3 xl:col-span-4 box p-2 border rounded bg-gray-100">
+            <TotalDistancePerYear />
+          </div>
+        </div>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
 
           <div className="box p-2 border rounded bg-gray-100 col-span-2">
@@ -101,24 +114,9 @@ const Stats = () => {
         </div>
 
         {/* Weitere Boxen */}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
         
-         
-          <div className="box p-2 border rounded bg-gray-100">
-            <MostNightsPlace />
-            <MostVisitedPlaces />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
-            <SeasonAnalysis />
-            <PopularMonth />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
-            <TotalDistancePerYear />
-          </div>
-          <div className="box p-2 border rounded bg-gray-100">
-            <TotalDistance />
-          </div>
-        </div>
+
+
       </div>
     </GeistProvider>
   );
