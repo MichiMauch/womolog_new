@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import { CircularProgress, Box } from '@mui/material';
+import styles from './MapPage.module.css'; // Importieren des CSS-Moduls
 
 // Dynamisches Importieren der Karte
 const Map = dynamic(() => import('../components/LeafletMap'), { ssr: false });
@@ -34,7 +35,11 @@ const MapPage = () => {
     );
   }
 
-  return <Map data={data} />;
+  return (
+    <div className={styles.mapContainer}>
+      <Map data={data} fullHeight={true} />
+    </div>
+  );
 };
 
 export default MapPage;

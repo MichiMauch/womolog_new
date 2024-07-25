@@ -1,4 +1,3 @@
-// components/VisitsPerCountry.js
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { calculateStatistics } from '../../utils/statistics'; // Pfad anpassen, falls notwendig
@@ -140,7 +139,7 @@ const VisitsPerCountry = () => {
   ];
 
   return (
-    <div style={{ width: "100%", height: "80vh", margin: "0", padding: "0", position: 'relative' }} 
+    <div style={{ width: "100%", height: "40vh", margin: "0", padding: "0", position: 'relative' }} 
          onMouseEnter={handleMouseEnter}
          onMouseLeave={handleMouseLeave}>
       <MapContainer 

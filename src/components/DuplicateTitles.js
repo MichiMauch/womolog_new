@@ -15,7 +15,7 @@ const DuplicateTitles = () => {
         const sortedTitles = duplicateTitles.sort((a, b) => b.count - a.count);
 
         // Nur die Top 10 Titel speichern
-        setDuplicateTitles(sortedTitles.slice(0, 5));
+        setDuplicateTitles(sortedTitles.slice(0, 10));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
