@@ -7,8 +7,5 @@
         "cache-control": "s-maxage=172800, stale-while-revalidate"
       }
     }
-  ],
-  "builds": [
-    { "src": "next.config.js", "use": "@vercel/next" }
   ]
 }
