@@ -5,8 +5,8 @@ interface DistanceData {
     [year: string]: number;
 }
 
-const EARTH_CIRCUMFERENCE_KM = 40075;
-const MOON_DISTANCE_KM = 384400;
+const EARTH_CIRCUMFERENCE_KM = parseInt(process.env.NEXT_PUBLIC_EARTH_CIRCUMFERENCE_KM || '40075', 10);
+const MOON_DISTANCE_KM = parseInt(process.env.NEXT_PUBLIC_MOON_DISTANCE_KM || '384400', 10);
 
 const formatNumber = (num: number): string => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
@@ -57,7 +57,7 @@ const TotalKilometers = () => {
             <div className="flex flex-col items-start p-4">
                 <div className="text-gray-500 text-sm mb-1">Kilometer total</div>
                 <div className="text-black text-4xl font-semibold">{totalFormatted} km</div>
-                <div className="text-black text-md mt-2 flex items-center">     
+                <div className="text-black text-md mt-2 flex items-center">
                     Das sind {earthCircumferenceTimes} Mal um die  <FaGlobe className="ml-2 text-blue-500" /> 
                 </div>
                 <div className="text-black text-md mt-2 flex items-center">

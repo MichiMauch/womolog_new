@@ -70,7 +70,7 @@ const Stats = () => {
         </div>
 
           <div className="box border rounded bg-gray-100 col-span-2">
-            <VisitsPerCountry />
+          <VisitsPerYear />
           </div>
         </div>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4"> 
@@ -106,10 +106,10 @@ const Stats = () => {
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
 
           <div className="box p-2 border rounded bg-gray-100 col-span-2">
-            <VisitsPerYear />
+            <DuplicateTitles />
           </div>
           <div className="box p-2 border rounded bg-gray-100 col-span-2">
-            <DuplicateTitles />
+             <VisitsPerCountry />
           </div>
         </div>
 
