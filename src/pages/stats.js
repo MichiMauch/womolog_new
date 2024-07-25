@@ -17,8 +17,8 @@ import SeasonAnalysis from '../components/SeasonAnalysis'; // Pfad anpassen, fal
 import PopularMonth from '../components/PopularMonth'; // Pfad anpassen, falls notwendig
 import MostVisitedPlaces from '../components/MostVisitedPlaces'; // Pfad anpassen, falls notwendig
 import LongestPause from '../components/LongestPause'; // Pfad anpassen, falls notwendig
-import TotalDistancePerYear from '../components/TotalDistancePerYear'; // Pfad anpassen, falls notwendig
-import TotalDistance from '../components/TotalDistance'; // Pfad anpassen, falls notwendig
+import KilometersPerYear from '../components/TotalDistancePerYear'; // Pfad anpassen, falls notwendig
+import TotalKilometers from '../components/TotalDistance'; // Pfad anpassen, falls notwendig
 
 const Map = dynamic(() => import('../components/LeafletMap'), { ssr: false });
 
@@ -86,7 +86,7 @@ const Stats = () => {
             <AverageNightsPerPlace />
           </div>
           <div className="box p-2 border rounded bg-gray-100">
-            <TotalDistance />
+            <TotalKilometers />
           </div>
         </div>
         {/* Drei Boxen */}
@@ -100,7 +100,7 @@ const Stats = () => {
         </div>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
           <div className="col-span-1 sm:col-span-2 lg:col-span-3 xl:col-span-4 box p-2 border rounded bg-gray-100">
-            <TotalDistancePerYear />
+            <KilometersPerYear />
           </div>
         </div>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">

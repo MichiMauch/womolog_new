@@ -1,0 +1,45 @@
+import path from 'path';
+
+let fs;
+if (typeof window === 'undefined') {
+    fs = require('fs');
+}
+
+console.log('Cache module loaded');
+
+// Definiere den Pfad für das Cache-Verzeichnis und die Cache-Datei
+const CACHE_DIR = typeof window === 'undefined' ? path.resolve(process.cwd(), 'cache') : null;
+const CACHE_FILE_PATH = typeof window === 'undefined' ? path.join(CACHE_DIR, 'routeCache.json') : null;
+
+// Erstelle das Cache-Verzeichnis, falls es nicht existiert
+if (fs && !fs.existsSync(CACHE_DIR)) {
+    console.log(`Creating cache directory at ${CACHE_DIR}`);
+    fs.mkdirSync(CACHE_DIR);
+} else if (fs) {
+    console.log(`Cache directory already exists at ${CACHE_DIR}`);
+}
+
+// Funktion zum Lesen des Caches
+export function readCache() {
+    if (!fs) return {}; // Im Client-Kontext zurückkehren
+    console.log(`Reading cache from ${CACHE_FILE_PATH}`);
+    if (!fs.existsSync(CACHE_FILE_PATH)) {
+        console.log('Cache file does not exist. Returning empty cache.');
+        return {};
+    }
+    const cacheData = fs.readFileSync(CACHE_FILE_PATH, 'utf-8');
+    console.log(`Cache file read successfully. Data: ${cacheData}`);
+    return JSON.parse(cacheData);
+}
+
+// Funktion zum Schreiben des Caches
+export function writeCache(cache) {
+    if (!fs) return; // Im Client-Kontext zurückkehren
+    console.log(`Writing cache to ${CACHE_FILE_PATH}`);
+    try {
+        fs.writeFileSync(CACHE_FILE_PATH, JSON.stringify(cache, null, 2), 'utf-8');
+        console.log('Cache file written successfully.');
+    } catch (error) {
+        console.error('Error writing cache file:', error);
+    }
+}
