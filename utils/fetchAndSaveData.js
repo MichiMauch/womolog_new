@@ -8,6 +8,13 @@ const CACHE_FILE_PATH = path.resolve(process.cwd(), 'cache', 'routeData.json');
 const homeCoordinates = [47.33891, 8.05069];
 const MAX_WAYPOINTS = 50;
 
+function ensureCacheDirExists() {
+    const cacheDir = path.dirname(CACHE_FILE_PATH);
+    if (!fs.existsSync(cacheDir)) {
+        fs.mkdirSync(cacheDir, { recursive: true });
+    }
+}
+
 function parseDate(dateString) {
     const [day, month, year] = dateString.split('.').map(Number);
     return new Date(year, month - 1, day); // month - 1, da Monate in JS von 0-11 sind
@@ -55,6 +62,8 @@ async function calculateTotalDistance(waypoints) {
 }
 
 async function fetchAndSaveData() {
+    ensureCacheDirExists(); // Sicherstellen, dass das Cache-Verzeichnis existiert
+
     try {
         const response = await axios.get('http://localhost:3000/api/sheetData'); // Passen Sie dies an Ihre tatsächliche URL an
         const data = response.data;
