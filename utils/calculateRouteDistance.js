@@ -1,18 +1,24 @@
 import axios from 'axios';
-
-let readCache;
-let writeCache;
-
-if (typeof window === 'undefined') {
-    const cache = require('./cache');
-    readCache = cache.readCache;
-    writeCache = cache.writeCache;
-}
+import path from 'path';
+import fs from 'fs';
 
 const API_KEY = process.env.NEXT_PUBLIC_OPENROUTESERVICE_API_KEY;
 const MAX_WAYPOINTS = 50;
+const cacheFilePath = path.resolve(process.cwd(), 'cache', 'cache.json');
 
 console.log('calculateRouteDistance.js loaded');
+
+function readCache() {
+    if (fs.existsSync(cacheFilePath)) {
+        const data = fs.readFileSync(cacheFilePath, 'utf8');
+        return JSON.parse(data);
+    }
+    return {};
+}
+
+function writeCache(data) {
+    fs.writeFileSync(cacheFilePath, JSON.stringify(data));
+}
 
 export async function calculateRouteDistance(waypoints) {
     console.log('calculateRouteDistance called with waypoints:', waypoints);
@@ -24,7 +30,7 @@ export async function calculateRouteDistance(waypoints) {
     let cache = {};
     let cacheKey = JSON.stringify(waypoints);
 
-    if (readCache && writeCache) {
+    if (typeof window === 'undefined') {
         console.log('Reading from cache...');
         try {
             cache = readCache();
@@ -69,7 +75,7 @@ export async function calculateRouteDistance(waypoints) {
                 const distanceInKm = distance / 1000;
                 console.log('Calculated Distance in Km:', distanceInKm);
 
-                if (readCache && writeCache) {
+                if (typeof window === 'undefined') {
                     console.log('Caching distance:', distanceInKm);
                     cache[cacheKey] = { distance: distanceInKm, timestamp: Date.now() };
                     try {

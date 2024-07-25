@@ -1,12 +1,15 @@
 {
-    "version": 2,
-    "routes": [
-      {
-        "src": "/api/route-service",
-        "headers": {
-          "cache-control": "s-maxage=172800, stale-while-revalidate"
-        }
+  "version": 2,
+  "routes": [
+    {
+      "src": "/api/route-service",
+      "headers": {
+        "cache-control": "s-maxage=172800, stale-while-revalidate"
       }
-    ]
-  }
-  
+    }
+  ],
+  "builds": [
+    { "src": "next.config.js", "use": "@vercel/next" }
+  ],
+  "ignore": ["cache/*"]
+}
