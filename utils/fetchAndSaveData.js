@@ -119,9 +119,7 @@ async function fetchAndSaveData() {
     }
 }
 
-// Wenn das Skript direkt ausgeführt wird, die Daten abrufen und speichern
-if (require.main === module) {
-    fetchAndSaveData();
+export default async function handler(req, res) {
+    await fetchAndSaveData();
+    res.status(200).json({ message: 'Data fetched and saved successfully.' });
 }
-
-export default fetchAndSaveData;
