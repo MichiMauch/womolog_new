@@ -18,9 +18,9 @@ export default async function handler(req, res) {
         console.log('Calculated Distance:', distance);
 
         // Setze Cache-Control-Header
-        const cacheTtl = 86400; // 24 Stunden
-        res.setHeader('Cache-Control', `s-maxage=${cacheTtl}, stale-while-revalidate`);
-        console.log('Cache-Control Header set with TTL:', cacheTtl);
+        // const cacheTtl = 86400; // 24 Stunden
+        // res.setHeader('Cache-Control', `s-maxage=${cacheTtl}, stale-while-revalidate`);
+        // console.log('Cache-Control Header set with TTL:', cacheTtl);
 
         // Sende die Antwort mit dem Cache-Header
         res.status(200).json({ distance });
