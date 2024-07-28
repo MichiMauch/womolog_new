@@ -65,7 +65,8 @@ async function fetchAndSaveData() {
     ensureCacheDirExists(); // Sicherstellen, dass das Cache-Verzeichnis existiert
 
     try {
-        const response = await axios.get('http://localhost:3000/api/sheetData'); // Passen Sie dies an Ihre tatsächliche URL an
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sheetData`;
+        const response = await axios.get(apiUrl);
         const data = response.data;
 
         const groupedData = data.reduce((acc, row) => {
@@ -120,6 +121,10 @@ async function fetchAndSaveData() {
 }
 
 export default async function handler(req, res) {
-    await fetchAndSaveData();
-    res.status(200).json({ message: 'Data fetched and saved successfully.' });
+    try {
+        await fetchAndSaveData();
+        res.status(200).json({ message: 'Data fetched and saved successfully.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch data' });
+    }
 }
