@@ -2,10 +2,7 @@
   "version": 2,
   "routes": [
     {
-      "src": "/api/route-service",
-      "headers": {
-        "cache-control": "s-maxage=0, stale-while-revalidate"
-      }
+      "src": "/api/route-service"
     }
   ]
 }

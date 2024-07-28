@@ -29,26 +29,31 @@ async function calculateRouteDistance(waypoints) {
         radiuses: radiuses
     };
 
-    const response = await axios.post(
-        `https://api.openrouteservice.org/v2/directions/driving-car`,
-        requestBody,
-        {
-            headers: {
-                'Authorization': API_KEY,
-                'Content-Type': 'application/json'
+    try {
+        const response = await axios.post(
+            `https://api.openrouteservice.org/v2/directions/driving-car`,
+            requestBody,
+            {
+                headers: {
+                    'Authorization': API_KEY,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        if (response.data && response.data.routes && response.data.routes[0]) {
+            const route = response.data.routes[0];
+            if (route && route.segments) {
+                const distance = route.segments.reduce((total, segment) => total + segment.distance, 0);
+                return distance / 1000; // Convert to km
             }
         }
-    );
 
-    if (response.data && response.data.routes && response.data.routes[0]) {
-        const route = response.data.routes[0];
-        if (route && route.segments) {
-            const distance = route.segments.reduce((total, segment) => total + segment.distance, 0);
-            return distance / 1000; // Convert to km
-        }
+        throw new Error('Invalid API response');
+    } catch (error) {
+        console.error('Error in calculateRouteDistance:', error);
+        throw error;
     }
-
-    throw new Error('Invalid API response');
 }
 
 async function calculateTotalDistance(waypoints) {
@@ -66,6 +71,7 @@ async function fetchAndSaveData() {
 
     try {
         const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sheetData`;
+        console.log('Fetching data from:', apiUrl);
         const response = await axios.get(apiUrl);
         const data = response.data;
 
@@ -117,14 +123,8 @@ async function fetchAndSaveData() {
         console.log('Data saved successfully.');
     } catch (error) {
         console.error('Error fetching or calculating data:', error);
+        throw error; // Fehler weiterwerfen, um sie im Handler abzufangen
     }
 }
 
-export default async function handler(req, res) {
-    try {
-        await fetchAndSaveData();
-        res.status(200).json({ message: 'Data fetched and saved successfully.' });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch data' });
-    }
-}
+export default fetchAndSaveData;
