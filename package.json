@@ -22,7 +22,7 @@
     "@mui/icons-material": "^5.15.21",
     "@mui/material": "^5.15.20",
     "@types/react-leaflet": "^3.0.0",
-    "aws-sdk": "^2.1637.0",
+    "aws-sdk": "^2.1664.0",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "date-fns": "^3.6.0",
