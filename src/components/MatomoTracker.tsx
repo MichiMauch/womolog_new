@@ -1,26 +1,41 @@
-"use client";  // Diese Komponente wird auf der Client-Seite ausgeführt
+"use client"; // Diese Komponente wird auf der Client-Seite ausgeführt
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-// Erweitere den globalen Window-Typ
+// Erweitere den globalen Window-Typ für TypeScript
 declare global {
   interface Window {
-    _mtm?: any[];
+    _paq?: any[];
   }
 }
 
-export default function MatomoTracker() {
+const MatomoTracker = () => {
   useEffect(() => {
-    // Weise _mtm als Array zu oder erhalte das bestehende
-    window._mtm = window._mtm || [];
-    window._mtm.push({ 'mtm.startTime': (new Date().getTime()), event: 'mtm.Start' });
-    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-    g.async = true;
-    g.src = 'https://stageopenmetrics.netnode.ch/js/container_eO70Vyok.js';  // Deine Container-ID eingefügt
-    if (s && s.parentNode) {
-      s.parentNode.insertBefore(g, s);
-    }
-  }, []);
+    // Initialisiere window._paq, wenn es nicht existiert
+    window._paq = window._paq || [];
+    window._paq.push(['trackPageView']);
+    window._paq.push(['enableLinkTracking']);
 
-  return null;  // Kein sichtbares HTML-Element, nur der Tracking-Code wird eingefügt
-}
+    (function () {
+      var u = "//stageopenmetrics.netnode.ch/";
+      window._paq.push(['setTrackerUrl', u + 'matomo.php']);
+      window._paq.push(['setSiteId', '2']);
+      
+      var d = document, 
+          g = d.createElement('script'), 
+          s = d.getElementsByTagName('script')[0];
+      
+      g.async = true;
+      g.src = u + 'matomo.js';
+      
+      // Überprüfe, ob s und s.parentNode existieren, um den TypeScript-Fehler zu vermeiden
+      if (s && s.parentNode) {
+        s.parentNode.insertBefore(g, s);
+      }
+    })();
+  }, []); // Der Code wird nur einmal ausgeführt
+
+  return null; // Diese Komponente rendert nichts, nur der Tracking-Code wird ausgeführt
+};
+
+export default MatomoTracker;
