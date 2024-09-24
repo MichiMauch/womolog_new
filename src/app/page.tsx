@@ -300,28 +300,28 @@ export default function Home() {
               onClick={() => openModal(place)}
             >
               <div className="relative h-full w-full rounded-lg overflow-hidden">
-  <img
-    alt={place.title}
-    className="absolute inset-0 h-full w-full object-cover transform transition-transform duration-500 ease-in-out hover:scale-105 rounded-lg"
-    src={place.imageLinks}
-  />
-  
-  {/* Flagge oben rechts */}
-  <img 
-    src={`https://flagcdn.com/w320/${place.country_code.toLowerCase()}.png`} 
-    alt={`${place.country} flag`} 
-    className="absolute top-4 right-4 h-6 w-8" // Flagge oben rechts positionieren
-  />
+                <img
+                  alt={place.title}
+                  className="absolute inset-0 h-full w-full object-cover transform transition-transform duration-500 ease-in-out hover:scale-105 rounded-lg"
+                  src={place.imageLinks}
+                />
+                
+                {/* Flagge oben rechts */}
+                <img 
+                  src={`https://flagcdn.com/w320/${place.country_code.toLowerCase()}.png`} 
+                  alt={`${place.country} flag`} 
+                  className="absolute top-4 right-4 h-6 w-8" // Flagge oben rechts positionieren
+                />
 
-  <div className="absolute bottom-0 p-4 rounded-lg">
-    <p className="text-white mb-1 font-bold">
-      {place.title} <br />
-      {place.location} {' '}
-      <br />
-      {place.dateFrom} - {place.dateTo}
-    </p>
-  </div>
-</div>
+                <div className="absolute bottom-0 p-4 rounded-lg">
+                  <p className="text-white mb-1 font-bold">
+                    {place.title} <br />
+                    {place.location} {' '}
+                    <br />
+                    {place.dateFrom} - {place.dateTo}
+                  </p>
+                </div>
+              </div>
 
             </div>
           ))}
@@ -335,7 +335,7 @@ export default function Home() {
       </main>
       <footer className="p-6 text-center text-white/80 sm:p-12 dark:text-gray-100">
         <a href="https://www.michimauch.ch/" target="_blank" className="font-semibold hover:text-white dark:hover:text-gray-300" rel="noreferrer">
-          Michi & Sibylle Mauch
+          Michi & Sibylle
         </a>
       </footer>
       {selectedPlace && (
@@ -360,10 +360,16 @@ export default function Home() {
                       {selectedPlace.title}
                     </Typography>
                     <Typography id="modal-modal-description" className="text-white">
-                      {selectedPlace.location} ({selectedPlace.country_code.toUpperCase()})
+                      {selectedPlace.location} {' '}
+                      <img 
+                        src={`https://flagcdn.com/w320/${selectedPlace.country_code.toLowerCase()}.png`} 
+                        alt={`${selectedPlace.country} flag`} 
+                        className="inline-block h-6 w-8" // Flagge inline positionieren
+                      />
                       <br />
                       {selectedPlace.dateFrom} - {selectedPlace.dateTo}
                     </Typography>
+
                   </div>
                   <div className="flex flex-col items-center ml-4">
                     <Weather latitude={selectedPlace.latitude} longitude={selectedPlace.longitude} /> {/* Wetterkomponente */}
