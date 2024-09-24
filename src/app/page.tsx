@@ -13,6 +13,8 @@ import Header from '../components/Header'; // Import the updated Header componen
 import SecondChildModal from '../components/SecondChildModal'; // Neues Child-Modal importieren
 import Weather from '../components/Weather'; // Import the Weather component
 import AnimatedRV from '../components/AnimatedRV';
+import Pager from '../components/Pager'; // Pager-Komponente importieren
+
 
 const MapComponent = dynamic(() => import('../components/map'), {
   ssr: false,
@@ -114,6 +116,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [filteredData, setFilteredData] = useState<Place[]>([]);
   const [countries, setCountries] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(1); // Aktuelle Seite für Pagination
+  const itemsPerPage = 16; // Anzahl der Elemente pro Seite
 
   const convertDate = (dateStr: string) => {
     const [day, month, year] = dateStr.split('.').map(Number);
@@ -165,6 +169,8 @@ export default function Home() {
 
     fetchData();
   }, [fetchData]);
+
+  
 
   const convertCloudflareLink = (link: string) => {
     const segments = link.split('/');
@@ -232,6 +238,12 @@ export default function Home() {
     }, 300);
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -280,7 +292,7 @@ export default function Home() {
               besucht haben.
             </p>
           </div>
-          {filteredData.map((place, index) => (
+          {paginatedData.map((place, index) => (
             <div
               key={index}
               className="post relative block w-full cursor-pointer rounded-lg shadow-md dark:bg-gray-900 dark:text-gray-100 transition-opacity duration-500"
@@ -305,6 +317,12 @@ export default function Home() {
             </div>
           ))}
         </div>
+        <Pager
+          currentPage={currentPage}
+          totalItems={filteredData.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+        />
       </main>
       <footer className="p-6 text-center text-white/80 sm:p-12 dark:text-gray-100">
         <a href="https://www.michimauch.ch/" target="_blank" className="font-semibold hover:text-white dark:hover:text-gray-300" rel="noreferrer">
@@ -427,5 +445,4 @@ export default function Home() {
       )}
     </GeistProvider>
   );
-  
 }
