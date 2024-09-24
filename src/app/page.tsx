@@ -300,20 +300,29 @@ export default function Home() {
               onClick={() => openModal(place)}
             >
               <div className="relative h-full w-full rounded-lg overflow-hidden">
-                <img
-                  alt={place.title}
-                  className="absolute inset-0 h-full w-full object-cover transform transition-transform duration-500 ease-in-out hover:scale-105 rounded-lg"
-                  src={place.imageLinks}
-                />
-                <div className="absolute bottom-0 p-4 rounded-lg">
-                  <p className="text-white mb-1 font-bold">
-                    {place.title} <br />
-                    {place.location} ({place.country_code.toUpperCase()})
-                    <br /> {/* toUpperCase() verwenden */}
-                    {place.dateFrom} - {place.dateTo}
-                  </p>
-                </div>
-              </div>
+  <img
+    alt={place.title}
+    className="absolute inset-0 h-full w-full object-cover transform transition-transform duration-500 ease-in-out hover:scale-105 rounded-lg"
+    src={place.imageLinks}
+  />
+  
+  {/* Flagge oben rechts */}
+  <img 
+    src={`https://flagcdn.com/w320/${place.country_code.toLowerCase()}.png`} 
+    alt={`${place.country} flag`} 
+    className="absolute top-4 right-4 h-6 w-8" // Flagge oben rechts positionieren
+  />
+
+  <div className="absolute bottom-0 p-4 rounded-lg">
+    <p className="text-white mb-1 font-bold">
+      {place.title} <br />
+      {place.location} {' '}
+      <br />
+      {place.dateFrom} - {place.dateTo}
+    </p>
+  </div>
+</div>
+
             </div>
           ))}
         </div>

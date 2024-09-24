@@ -61,6 +61,7 @@ const flagUrls: { [key: string]: string } = {
   Frankreich: 'https://flagcdn.com/w320/fr.png',
   Italien: 'https://flagcdn.com/w320/it.png',
   Dänemark: 'https://flagcdn.com/w320/dk.png',
+  Luxemburg: 'https://flagcdn.com/w320/lu.png',
 
   // Weitere Länder hier hinzufügen
 };
