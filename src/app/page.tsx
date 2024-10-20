@@ -3,9 +3,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import BentoGrid from '../components/CardComponent'; // Importiere die BentoGrid-Komponente
 import Pager from '../components/Pager'; // Importiere die Pager-Komponente
 import Header from '../components/Header'; // Pfad anpassen
-
-
-
+import Footer from '../components/Footer'; // Importiere den Footer
+import Spinner from '../components/Spinner'; // Importiere die Spinner-Komponente
 
 export interface Place {
   title: string;
@@ -23,8 +22,14 @@ export default function Home() {
   const [places, setPlaces] = useState<Place[]>([]);
   const [filteredData, setFilteredData] = useState<Place[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false); // Zustand, um zu erkennen, ob wir im Client sind
   const [currentPage, setCurrentPage] = useState(1); // Aktuelle Seite für Pagination
   const itemsPerPage = 14; // Anzahl der Elemente pro Seite
+
+  useEffect(() => {
+    // Markiere den Client, sobald der Code im Browser ausgeführt wird
+    setIsClient(true);
+  }, []);
 
   const convertDate = (dateStr: string) => {
     const [day, month, year] = dateStr.split('.').map(Number);
@@ -79,20 +84,30 @@ export default function Home() {
 
   const paginatedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  if (isLoading) {
-    return <p>Daten werden geladen...</p>; // Loading-Zustand
+  // Verhindere das Rendern des UI im Serverzustand, bis der Client erkannt wurde
+  if (!isClient) {
+    return <div className="min-h-screen flex flex-col justify-between" />; // Leeres Div um Sprünge zu vermeiden
   }
 
+  // Zeige den Spinner an, während die Daten geladen werden
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  // Wenn alles geladen ist, zeige den eigentlichen Inhalt
   return (
-    <div className="bg-white min-h-screen"> {/* Hintergrund schwarz */}
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <BentoGrid places={paginatedData} />
-      <Pager
-        currentPage={currentPage}
-        totalItems={filteredData.length}
-        itemsPerPage={itemsPerPage}
-        onPageChange={handlePageChange}
-      />
+      <div className="flex-grow">
+        <BentoGrid places={paginatedData} />
+        <Pager
+          currentPage={currentPage}
+          totalItems={filteredData.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+        />
+      </div>
+      <Footer /> {/* Footer immer unten fixiert */}
     </div>
   );
 }

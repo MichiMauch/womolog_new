@@ -4,7 +4,6 @@ import "./globals.css";
 import Head from 'next/head';
 import MatomoTracker from "../components/MatomoTracker";  // Importiere die Client-Komponente
 import Footer from '../components/Footer';
-import Navbar from '../components/Navbar'; // Importiere die Navbar-Komponente
 
 
 
