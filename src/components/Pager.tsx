@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface PagerProps {
   currentPage: number;
@@ -9,7 +9,28 @@ interface PagerProps {
 
 export default function Pager({ currentPage, totalItems, itemsPerPage, onPageChange }: PagerProps) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const maxPagesToShow = 5; // Anzahl der Seiten, die angezeigt werden sollen
+  const [maxPagesToShow, setMaxPagesToShow] = useState(5); // Standard: 5 Seiten für Desktop
+
+  useEffect(() => {
+    // Funktion zum Ändern der Seitenanzahl basierend auf der Bildschirmgröße
+    const handleResize = () => {
+      if (window.innerWidth <= 640) { // Mobile Breakpoint: z.B. max-width 640px
+        setMaxPagesToShow(2); // Zeige nur 2 Seitenzahlen auf mobilen Geräten
+      } else {
+        setMaxPagesToShow(5); // Zeige 5 Seitenzahlen auf größeren Bildschirmen
+      }
+    };
+
+    // Event Listener für Fenstergrößenänderung
+    window.addEventListener('resize', handleResize);
+
+    // Initiale Überprüfung bei Seitenladen
+    handleResize();
+
+    // Cleanup Event Listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const halfRange = Math.floor(maxPagesToShow / 2);
 
   // Berechnung der sichtbaren Seiten
@@ -57,7 +78,6 @@ export default function Pager({ currentPage, totalItems, itemsPerPage, onPageCha
             &lt;
           </button>
 
-          {/* Seitenzahlen anzeigen */}
           {/* Seitenzahlen anzeigen */}
           {Array.from({ length: endPage - startPage + 1 }, (_, index) => {
             const page = startPage + index;
