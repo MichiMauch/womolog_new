@@ -1,75 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Box, Drawer, Fab } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import CombinedFilter from './CombinedFilter';
+import React from 'react';
+import TotalVisitedPlaces from '../components/TotalVisitedPlaces'; // Pfad anpassen, falls notwendig
+import TotalNights from '../components/TotalNights'; // Pfad anpassen, falls notwendig
+import TotalKilometersStart from '../components/TotalDistanceStart'; // Pfad anpassen, falls notwendig
+import AverageNightsPerPlace from '../components/AverageNightsPerPlace'; // Pfad anpassen, falls notwendig
 
-interface HeaderProps {
-  countries: string[];
-  onFilter: (startDate: Date | null, endDate: Date | null, country: string) => void;
-  onReset: () => void;
-}
+const stats = [
+  { id: 'total-places', value: <TotalVisitedPlaces /> },
+  { id: 'total-nights', value: <TotalNights /> },
+  { id: 'total-km', value: <TotalKilometersStart /> },
+  { id: 'season-analysis', value: <AverageNightsPerPlace /> },
+];
 
-const Header: React.FC<HeaderProps> = ({ countries, onFilter, onReset }) => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    const handleDrawerToggle = () => {
-      setMobileOpen((prevOpen) => !prevOpen);
-    };
-
-    const fab = document.getElementById('fab');
-    if (fab) {
-      fab.addEventListener('click', handleDrawerToggle);
-    }
-
-    return () => {
-      if (fab) {
-        fab.removeEventListener('click', handleDrawerToggle);
-      }
-    };
-  }, []);
-
+const Header: React.FC = () => {
   return (
-    <>
-      <AppBar position="static" sx={{ backgroundColor: 'black' }} className="header">
-        <Toolbar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '8px 0' }}>
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', width: '100%', justifyContent: 'center', gap: '8px' }}>
-            <CombinedFilter countries={countries} onFilter={onFilter} onReset={onReset} onClose={() => {}} />
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        anchor="bottom"
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-        sx={{ display: { xs: 'block', md: 'none' } }}
-        transitionDuration={{ enter: 300, exit: 300 }} // Unified transition duration
-      >
-        <Box sx={{ p: 2, backgroundColor: 'black', color: 'white' }}>
-          <CombinedFilter countries={countries} onFilter={onFilter} onReset={onReset} onClose={() => setMobileOpen(false)} />
-        </Box>
-      </Drawer>
-      <Fab
-        id="fab"
-        color="inherit"
-        aria-label="open drawer"
-        sx={{
-          display: { xs: 'flex', md: 'none' },
-          position: 'fixed',
-          bottom: 0, // Set bottom to 0 to align with the screen bottom
-          transform: `translateY(${mobileOpen ? '-295px' : '0'})`, // Adjust based on drawer height
-          right: 16,
-          zIndex: 2000, // Ensure the fab stays above the drawer
-          backgroundColor: 'black !important', // Ensure background is always black
-          borderRadius: '4px',
-          width: 56,
-          height: 56,
-          transition: 'transform 0.3s', // Unified transition duration
-        }}
-      >
-        <MenuIcon sx={{ color: 'white' }} />
-      </Fab>
-    </>
+    <div className="relative isolate overflow-hidden bg-blue-50 pt-12 pb-0 sm:pt-12 sm:pb-0">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+          {/* Textbereich */}
+          <div className="max-w-2xl">
+            <h2 className="text-4xl font-bold tracking-tight text-black sm:text-6xl">Besuchte Orte mit dem Camper</h2>
+            <p className="mt-6 text-lg leading-8 text-gray-700">
+            Unsere besuchten Stell-, Camping- und Parkplätze, an denen wir seit 2018 mindestens eine Nacht mit dem Camper verbracht haben.</p>          </div>
+          
+          {/* Boxen-Bereich */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-3 mt-10 lg:mt-0 lg:ml-10">
+            {stats.map((stat) => (
+              <div
+                key={stat.id}
+                className="bg-white flex flex-col items-start justify-start py-2 px-4 border border-gray-300 rounded-lg"
+              >
+                <dd className="text-2xl font-bold leading-9 tracking-tight text-black">
+                  {stat.value}
+                </dd>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

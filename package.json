@@ -18,6 +18,8 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.2",
+    "@headlessui/react": "^2.1.10",
+    "@heroicons/react": "^2.1.5",
     "@material-tailwind/react": "^2.1.9",
     "@mui/icons-material": "^5.15.21",
     "@mui/material": "^5.15.20",

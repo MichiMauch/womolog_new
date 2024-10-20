@@ -67,11 +67,11 @@ const Weather: React.FC<WeatherProps> = ({ latitude, longitude }) => {
     <Box display="flex" flexDirection="column" alignItems="center">
       <ReactAnimatedWeather
         icon={icon}
-        color="white"
-        size={50}
+        color="black"
+        size={45}
         animate={true}
       />
-      <Typography variant="subtitle1" component="p" style={{ color: 'white' }}>
+      <Typography variant="subtitle1" component="p" style={{ color: 'black' }}>
         {Math.round(weatherData.main.temp)}°C
       </Typography>
     </Box>

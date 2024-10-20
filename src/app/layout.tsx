@@ -3,6 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Head from 'next/head';
 import MatomoTracker from "../components/MatomoTracker";  // Importiere die Client-Komponente
+import Footer from '../components/Footer';
+import Navbar from '../components/Navbar'; // Importiere die Navbar-Komponente
+
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -52,6 +56,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <MatomoTracker /> {/* Hier fügen wir die Matomo Client-Komponente ein */}
         {children}
+        <Footer />
       </body>
     </html>
   );

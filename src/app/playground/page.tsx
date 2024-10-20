@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState, useCallback } from 'react';
-import BentoGrid from '../components/CardComponent'; // Importiere die BentoGrid-Komponente
-import Pager from '../components/Pager'; // Importiere die Pager-Komponente
-import Header from '../components/Header'; // Pfad anpassen
-
+import BentoGrid from './components/CardComponent'; // Importiere die BentoGrid-Komponente
+import Pager from '../../components/Pager'; // Importiere die Pager-Komponente
+import Navbar from './components/Navbar'; // Importiere die Navbar-Komponente
+import Footer from './components/Footer';
 
 
 
@@ -84,8 +84,8 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-white min-h-screen"> {/* Hintergrund schwarz */}
-      <Header />
+    <div className="bg-black min-h-screen"> {/* Hintergrund schwarz */}
+      <Navbar /> {/* Nutze die Navbar hier */}
       <BentoGrid places={paginatedData} />
       <Pager
         currentPage={currentPage}
@@ -93,6 +93,7 @@ export default function Home() {
         itemsPerPage={itemsPerPage}
         onPageChange={handlePageChange}
       />
+      <Footer />
     </div>
   );
 }

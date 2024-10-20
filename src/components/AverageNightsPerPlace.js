@@ -27,7 +27,7 @@ const AverageNightsPerPlace = () => {
         Ø Übernachtungen pro Ort
         </div>
         <div className="text-black text-4xl font-semibold">
-          {averageNights.toFixed(2)} Nächte {/* Anzeige auf zwei Dezimalstellen gerundet */}
+          {averageNights.toFixed(2)} {/* Anzeige auf zwei Dezimalstellen gerundet */}
         </div>
       </div>
     </div>
