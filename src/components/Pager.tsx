@@ -74,8 +74,6 @@ export default function Pager({ currentPage, totalItems, itemsPerPage, onPageCha
             );
           })}
 
-
-
           {/* Button für eine Seite vor */}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
