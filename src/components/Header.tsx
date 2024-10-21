@@ -18,7 +18,7 @@ const Header: React.FC = () => {
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
           {/* Textbereich */}
           <div className="max-w-2xl">
-            <h2 className="text-4xl font-bold tracking-tight text-black sm:text-6xl">Besuchte Orte mit dem Camper</h2>
+            <h2 className="text-4xl font-bold tracking-tight text-black sm:text-6xl">Discover our WomoLog!</h2>
             <p className="mt-6 text-lg leading-8 text-gray-700">
             Unsere besuchten Stell-, Camping- und Parkplätze, an denen wir seit 2018 mindestens eine Nacht mit dem Camper verbracht haben.</p>          </div>
           

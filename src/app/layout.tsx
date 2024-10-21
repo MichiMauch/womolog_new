@@ -55,7 +55,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <MatomoTracker /> {/* Hier fügen wir die Matomo Client-Komponente ein */}
         {children}
-        <Footer />
       </body>
     </html>
   );
