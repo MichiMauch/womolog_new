@@ -22,7 +22,6 @@ function logDebug(message) {
     debugStream.write(`${message}\n`);
   }
 }
-
 async function calculateRouteDistance(waypoints) {
   logDebug('calculateRouteDistance function called');
   const cacheKey = JSON.stringify(waypoints);
